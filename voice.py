@@ -27,7 +27,7 @@ def menu_option():
     """ Prompts the user for a menu option. Options include creating a new account or logging in to an existing account. """
 
     
-    account_option = raw_input("\nWould you like to login(L) or create a new account(C)? ")
+    account_option = input("\nWould you like to login(L) or create a new account(C)? ")
 
     if account_option=="L" or account_option=="l":
         print("You are logging in now...")
