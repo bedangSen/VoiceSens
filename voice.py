@@ -73,9 +73,25 @@ def create_account():
     #                                                      Generating random passphrases for enrollment                                   #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
+    print("[ * ] Generating random passphrase ...")
+
+    speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
+    # speech_recognition.Recognizer().energy_threshold = 500                              #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
+    speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
+    
     for count in range(3):
         print("\nPassphrase [ " + str(count + 1) + " ]")
-        generate_words()
+        audio = generate_words()
+
+        with open("passphrase-microphone-results-" + str(count + 1) + ".wav", "wb") as f:
+            f.write(audio.get_wav_data())
+
+
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    #                                                                   VAD and LTSD                                                      #
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+
+
 
     
 
@@ -85,9 +101,6 @@ def account_login():
     
 
 def generate_words():
-    
-    print("[ * ] Please read the following words ...")
-
     # obtain audio from the microphone
 
     with speech_recognition.Microphone() as source:
@@ -109,9 +122,14 @@ def generate_words():
 
         print(random_words)
 
-        speech_recognition.Recognizer().pause_threshold = 5.5
-        speech_recognition.Recognizer().adjust_for_ambient_noise(source)
-        audio = speech_recognition.Recognizer().listen(source, timeout = 10)    
+        print("[ * ] Scanning environmental sound. Please remain silent ...")
+        speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration = 5)      #Adjusts the energy threshold dynamically using audio from source (an AudioSource instance) to account for ambient noise.
+        print("[ * ] Scanning complete ...")
+        print("[ * ] Recite the passphrase to train the voice model ...")
+        
+        audio = speech_recognition.Recognizer().listen(source, timeout = 10)            
+        
+        # print("Type : " + str(type(audio))) test
 
     # recognize speech using IBM Speech to Text
     IBM_USERNAME = "acdae4c1-2f72-483e-8448-3bcd3ee34aec"  # IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -126,7 +144,7 @@ def generate_words():
             print("\nThe words you have spoken aren't entirely correct. Please try again ...")
             generate_words()
         else:
-                return        
+                return audio     
 
     except speech_recognition.UnknownValueError:
         print("IBM Speech to Text could not understand audio")
