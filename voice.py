@@ -11,6 +11,7 @@ import numpy
 import scipy.io.wavfile
 import sounddevice
 import speech_recognition
+import datetime
 from fuzzywuzzy import fuzz
 from random_words import RandomWords
 
@@ -73,7 +74,7 @@ def create_account():
     #                                                      Generating random passphrases for enrollment                                   #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-    print("[ * ] Generating random passphrase ...")
+    print("\n[ * ] Generating random passphrase ...")
 
     speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
     # speech_recognition.Recognizer().energy_threshold = 500                              #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
@@ -86,11 +87,15 @@ def create_account():
         with open("passphrase-microphone-results-" + str(count + 1) + ".wav", "wb") as f:
             f.write(audio.get_wav_data())
 
+        # with open("log-microphone-results.txt", "at") as logs:
+        #     logs.write("\n\n" + str(datetime.datetime.now()) + "\n[ DEBUG ] : Audio file - " + str(audio.get_wav_data()))
+
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                                   VAD and LTSD                                                      #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
+    
 
 
     
@@ -179,20 +184,6 @@ def generate_words():
     #     print("Microsoft Bing Voice Recognition could not understand audio")
     # except speech_recognition.RequestError as e:
     #     print("Could not request results from Microsoft Bing Voice Recognition service; {0}".format(e))
-
-    # duration = 30  # seconds
-    # passphrase_recording = sounddevice.rec(int(duration * fs))
-
-    # input("Press any key to stop recording ...")
-    # sounddevice.stop()
-
-    # print("[ * ] Recording complete ...")
-
-    # print("[ DEBUG ] : Playing back recorded sound ...")
-    # sounddevice.play(passphrase_recording)
-    # sounddevice.wait()
-    # print("[ DEBUG ] : Playback complete ...")    
-
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
