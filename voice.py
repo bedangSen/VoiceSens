@@ -199,25 +199,22 @@ def create_account():
     #     f.write(str(mfcc_feat[0]))
     #     f.write(str(mfcc_feat.shape))
 
-    
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    #                                                           Gaussian Mixture Model                                                    #
+    # ------------------------------------------------------------------------------------------------------------------------------------#
 
+    gmm = GMM(n_components = 16,
+                n_iter = 200,
+                covariance_type='diag',
+                n_init = 3)
 
-    
+    gmm.fit(features)
 
-
-
-
-
-
-
-
-
-
-    
-
-
-    
-
+    # dumping the trained gaussian model
+    # picklefile = path.split("-")[0]+".gmm"
+    cPickle.dump(gmm,open(user_directory + username + ".gmm",'w'))
+    print("[ * ] modeling completed for user :" + username + " with data point = " + features.shape)    
+    features = np.asarray(())
 
 def account_login():
     print("Test you have entered login menu")
