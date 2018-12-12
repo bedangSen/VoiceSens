@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 # import scipy as sp
 import sys
-import numpy as np
-from six.moves import xrange
-from pyssp.util import read_signal, get_frame
 
+import matplotlib.pyplot as plt
+import numpy as np
+from pyssp.util import get_frame, read_signal
+from six.moves import xrange
 
 WINSIZE = 2048
 
@@ -16,6 +17,7 @@ class LTSD():
         self._window = window
         self._order = order
         self._amplitude = {}
+
         # calcurate parameters from datasets
         self._e0 = e0
         self._e1 = e1
@@ -74,7 +76,7 @@ class LTSD():
 
     def compute_without_noise(self, signal, size):
         self._windownum = int(len(signal)/(self._winsize/2) - 1)
-        # Calcurate the average noise spectrum amplitude based　on first 'size' bytes in the head part of input signal.
+        # Calculate the average noise spectrum amplitude based　on first 'size' bytes in the head part of input signal.
         self._avgnoise = self._compute_noise_avgspectrum(signal[0:size])**2
         return self._compute(signal)
 
@@ -117,51 +119,70 @@ class LTSD():
         return 10.0 * np.log10(np.average(self._ltse(signal, l)**2/self._avgnoise))
 
 
-class AdaptiveLTSD(LTSD):
-    def __init__(self, winsize, window, order, ratio=0.95, e0=200, e1=300, lambda0=40, lambda1=50):
-        self._ratio = ratio
-        LTSD.__init__(self, winsize, window, order, e0, e1, lambda0, lambda1)
+# class AdaptiveLTSD(LTSD):
+#     def __init__(self, winsize, window, order, ratio=0.95, e0=200, e1=300, lambda0=40, lambda1=50):
+#         self._ratio = ratio
+#         LTSD.__init__(self, winsize, window, order, e0, e1, lambda0, lambda1)
 
-    def _update_noise_spectrum(self, signal, l):
-        avgamp = np.zeros(self._winsize)
-        for idx in range(l - self._order, l + self._order + 1):
-            avgamp += self._get_amplitude(signal, idx)
-        avgamp = avgamp / float(self._order*2 + 1)
-        self._avgnoise = self._avgnoise * self._ratio + (avgamp**2)*(1.0-self._ratio)
+#     def _update_noise_spectrum(self, signal, l):
+#         avgamp = np.zeros(self._winsize)
+#         for idx in range(l - self._order, l + self._order + 1):
+#             avgamp += self._get_amplitude(signal, idx)
+#         avgamp = avgamp / float(self._order*2 + 1)
+#         self._avgnoise = self._avgnoise * self._ratio + (avgamp**2)*(1.0-self._ratio)
 
-    def _compute(self, signal):
-        ltsds = np.zeros(self._windownum)
-        prev = 0
-        pair = None
-        result = []
-        for l in xrange(self._windownum):
-            ltsd = self._ltsd(signal, l)
-            ltsds[l] = ltsd
-            x = self._is_signal(signal, ltsd, l)
-            if x:  # signal
-                if prev == 0:  # start signal segment
-                    pair = [l]
-                prev = 1
-            else:  # noise
-                if prev == 1:  # end signal segment
-                    pair.append(l-1)
-                    result.append(pair)
-                    self._update_noise_spectrum(signal, l)
-                    pair = None
-                prev = 0
-        return result, ltsds
+#     def _compute(self, signal):
+#         ltsds = np.zeros(self._windownum)
+#         prev = 0
+#         pair = None
+#         result = []
+#         for l in xrange(self._windownum):
+#             ltsd = self._ltsd(signal, l)
+#             ltsds[l] = ltsd
+#             x = self._is_signal(signal, ltsd, l)
+#             if x:  # signal
+#                 if prev == 0:  # start signal segment
+#                     pair = [l]
+#                 prev = 1
+#             else:  # noise
+#                 if prev == 1:  # end signal segment
+#                     pair.append(l-1)
+#                     result.append(pair)
+#                     self._update_noise_spectrum(signal, l)
+#                     pair = None
+#                 prev = 0
+#         return result, ltsds
 
 
-if __name__ == "__main__":
-    signal, params = read_signal(sys.argv[1], WINSIZE)
+# if __name__ == "__main__":
+#     signal, params = read_signal(sys.argv[1], WINSIZE)
+#     window = np.hanning(WINSIZE)
+
+#     ltsd = LTSD(WINSIZE, window, 5)
+#     res, ltsds = ltsd.compute_without_noise(signal, WINSIZE * int(params[2] / float(WINSIZE) / 3.0))
+#     print(ltsds)
+    
+#     fig = plt.figure()
+#     ax = fig.add_subplot(111)
+#     ax.plot(ltsds)
+#     plt.show()
+#     print(res)
+
+def ltsd_main_function(voice_signal):
+    # signal, params = read_signal(sys.argv[1], WINSIZE)
+    signal, params = read_signal(voice_signal, WINSIZE)
     window = np.hanning(WINSIZE)
 
     ltsd = LTSD(WINSIZE, window, 5)
     res, ltsds = ltsd.compute_without_noise(signal, WINSIZE * int(params[2] / float(WINSIZE) / 3.0))
+    
     # print(ltsds)
-    import matplotlib.pyplot as plt
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    ax.plot(ltsds)
-    plt.show()
+    
+    # fig = plt.figure()
+    # ax = fig.add_subplot(111)
+    # ax.plot(ltsds)
+    # plt.show()
+
     # print(res)
+
+    return res, ltsds

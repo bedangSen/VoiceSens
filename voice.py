@@ -7,22 +7,40 @@ __author__ = "Bedang Sen"
 __version__ = "0.1.0"
 __license__ = "none"
 
+import os                                                               #For creating directories
+import shutil                                                           #For deleting directories
 import numpy
 import scipy.io.wavfile
-import sounddevice
-import speech_recognition
+import config                                                           #This is the file where the credentials are stored
+# import sounddevice
+import speech_recognition                                               #For the speech detection alogrithms
 import datetime
-from fuzzywuzzy import fuzz
-from random_words import RandomWords
+import scipy.cluster
+from collections import defaultdict
+from ltsd import ltsd_main_function                                     #Implementation of LTSD function from https://github.com/shunsukeaihara/pyssp/blob/master/pyssp/vad/ltsd.py
+from fuzzywuzzy import fuzz                                             #For the fuzzy matching algorithms
+from random_words import RandomWords                                    #For generating random words
+from python_speech_features import mfcc                                 #For using the MFCC feature selection
 
+# import sys
+# import matplotlib.pyplot as plt
+# import numpy as np
+# from pyssp.util import get_frame, read_signal
+# from six.moves import xrange
+
+user_directory = 'Testing/test/'
+username = "test"
+
+
+WINSIZE = 2048
 fs = 48000
-sounddevice.default.samplerate = fs
-sounddevice.default.channels = 2
+# sounddevice.default.samplerate = fs
+# sounddevice.default.channels = 2
 
 def main():
     """ Main entry point of the app """
     menu_option()
-
+    
 
 def menu_option():
     """ Prompts the user for a menu option. Options include creating a new account or logging in to an existing account. """
@@ -44,14 +62,31 @@ def menu_option():
 
 def create_account():
     """ The Create Account Module : Allows user to create a user profile to store the voice """ 
-    # # ------------------------------------------------------------------------------------------------------------------------------------#
-    # #                                                      Prompting for Username                                                         #
-    # # ------------------------------------------------------------------------------------------------------------------------------------#
-    # username = input("[ * ] Please enter your username : ")
-    # # print("Username : " + username)
+
+    features_dictionary = defaultdict(list)                             #Creating a default dictionary. dict subclass that calls a factory function to supply missing values.
+
+
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    #                                                      Prompting for Username                                                         #
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    username = input("[ * ] Please enter your username : ")
+    # print("Username : " + username)
+
+    user_directory = "Testing\\" + username + "\\"
+
+    # Create target directory & all intermediate directories if don't exists
+    if not os.path.exists(user_directory):
+        os.makedirs(user_directory)
+        print("[ * ] Directory " , username ,  " Created ...")
+    else:    
+        print("[ * ] Directory " , username ,  " already exists ...")
+        print("[ * ] Overwriting existing directory ...")
+        shutil.rmtree(user_directory, ignore_errors=False, onerror=None)
+        os.makedirs(user_directory)
+        print("[ * ] Directory " , username ,  " Created ...")    
 
     # # ------------------------------------------------------------------------------------------------------------------------------------#
-    # #                                                      Recording background sound                                                     #
+    # #                                                      Recording background sound                                                     #   ---> Not used!!! 
     # # ------------------------------------------------------------------------------------------------------------------------------------#
 
     # print("[ * ] Scanning environmental sound. Please remain silent ...")
@@ -76,24 +111,93 @@ def create_account():
 
     print("\n[ * ] Generating random passphrase ...")
 
+    number_of_samples = 3                                                               #Represents the number of voice samples that the application is going to collect. 
     speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
-    # speech_recognition.Recognizer().energy_threshold = 500                              #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
+    # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
     speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
     
-    for count in range(3):
+    for count in range(number_of_samples):                                                              
         print("\nPassphrase [ " + str(count + 1) + " ]")
         audio = generate_words()
 
-        with open("passphrase-microphone-results-" + str(count + 1) + ".wav", "wb") as f:
+        with open(user_directory + "passphrase-microphone-results-" + str(count + 1) + ".wav", "wb") as f:
             f.write(audio.get_wav_data())
 
-        # with open("log-microphone-results.txt", "at") as logs:
-        #     logs.write("\n\n" + str(datetime.datetime.now()) + "\n[ DEBUG ] : Audio file - " + str(audio.get_wav_data()))
-
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
-    #                                                                   VAD and LTSD                                                      #
+    #                                                                   LTSD and MFCC                                                     #
     # ------------------------------------------------------------------------------------------------------------------------------------#
+
+    directory = os.fsencode(user_directory)
+    # print(directory)
+
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        # print(filename) #debug
+        if filename.endswith(".wav"):
+            # pass
+            # print(filename) #debug
+            (rate, signal) = scipy.io.wavfile.read(user_directory + filename)
+            mfcc_feat = mfcc(signal,
+                     rate,
+                     preemph=0.95,
+                     ceplifter=15,
+                     highfreq=6000,
+                     nfilt=55
+                     )
+            features_dictionary[username].extend(mfcc_feat)
+        else:
+            continue
+
+    # DEBUG
+    # print(features_dictionary)
+    with open(user_directory + "features-dictionary.txt", 'at' ) as features:
+        features.write(str(features_dictionary))
+
+
+    # debug
+    audio_file = user_directory + "passphrase-microphone-results-1.wav"                                  #For testing purposes. 
+    result, ltsds = ltsd_main_function(audio_file)
+
+    # debug
+    with open(user_directory + "passphrase-microphone-results-after_ltsd.txt", "wt") as f:
+        f.write(str(ltsds))
+
+    # (rate,signal) = scipy.io.wavfile.read(audio_file)
+
+    # debug
+    with open(user_directory + "passphrase-microphone-results-rate.txt", "wt") as f:
+        f.write(str(rate))
+
+    # debug
+    with open(user_directory + "passphrase-microphone-results-signal.txt", "wt") as f:
+        f.write(str(signal))
+
+    # print(signal.shape)
+    # print(rate)
+    # print(mfcc_feat.shape)
+
+    # debug
+    with open(user_directory + "passphrase-microphone-results-mfcc.txt", "w") as f:
+        f.write(str(mfcc_feat[0]))
+        f.write(str(mfcc_feat.shape))
+
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    #                                                           Gaussian Mixture Model                                                    #
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+
+
+
+    
+
+
+
+
+
+
+
+
+
 
     
 
@@ -137,28 +241,34 @@ def generate_words():
         # print("Type : " + str(type(audio))) test
 
     # recognize speech using IBM Speech to Text
-    IBM_USERNAME = "acdae4c1-2f72-483e-8448-3bcd3ee34aec"  # IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-    IBM_PASSWORD = "p3CjDDb6hbaj"  # IBM Speech to Text passwords are mixed-case alphanumeric strings
     try:
-        recognised_words_ibm = speech_recognition.Recognizer().recognize_ibm(audio, username=IBM_USERNAME, password=IBM_PASSWORD)
+        recognised_words_ibm = speech_recognition.Recognizer().recognize_ibm(audio, username=config.IBM_USERNAME, password=config.IBM_PASSWORD)
         print("IBM Speech to Text thinks you said : " + recognised_words_ibm)
-        # print("IBM Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words_ibm)))
+        print("IBM Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words_ibm)))
         print("IBM Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words_ibm)))
 
         if fuzz.ratio(random_words, recognised_words_ibm) < 65:
             print("\nThe words you have spoken aren't entirely correct. Please try again ...")
-            generate_words()
+            audio = generate_words()
+            # print("This means that the function returned from the if condition : type - [" + str(type(audio)) + "]")
         else:
-                return audio     
+                # print("This means that the function returned the first time : type - [" + str(type(audio)) + "]")
+                # return audio
+                pass
+
+        # print("This means that the function returned not the first time : type - [" + str(type(audio)) + "]")
+        # return audio     
 
     except speech_recognition.UnknownValueError:
         print("IBM Speech to Text could not understand audio")
         print("\nPlease try again ...")
-        generate_words()
+        audio = generate_words()
     except speech_recognition.RequestError as e:
         print("Could not request results from IBM Speech to Text service; {0}".format(e))
         print("\nPlease try again ...")
-        generate_words()
+        audio = generate_words()
+
+    return audio
 
     # # recognize speech using Google Speech Recognition
     # try:
@@ -175,6 +285,15 @@ def generate_words():
     # except speech_recognition.RequestError as e:
     #     print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
+
+    # if fuzz.ratio(random_words, recognised_words_ibm) < 65 or fuzz.ratio(random_words, recognised_words_google) < 65:
+    #     print("\nThe words you have spoken aren't entirely correct. Please try again ...")
+    #     generate_words()
+    # else:
+    #     return audio
+             
+    
+
     # # recognize speech using Microsoft Bing Voice Recognition
     # BING_KEY = "6198a48cf6db495198f0123f3ecb8754"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
     # try:
@@ -184,6 +303,7 @@ def generate_words():
     #     print("Microsoft Bing Voice Recognition could not understand audio")
     # except speech_recognition.RequestError as e:
     #     print("Could not request results from Microsoft Bing Voice Recognition service; {0}".format(e))
+
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
