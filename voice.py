@@ -31,7 +31,6 @@ from python_speech_features import mfcc                                 #For usi
 user_directory = 'Testing/test/'
 username = "test"
 
-
 WINSIZE = 2048
 fs = 48000
 # sounddevice.default.samplerate = fs
@@ -186,7 +185,7 @@ def create_account():
     #                                                           Gaussian Mixture Model                                                    #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-
+    
 
     
 
