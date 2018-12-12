@@ -7,26 +7,27 @@ __author__ = "Bedang Sen"
 __version__ = "0.1.0"
 __license__ = "none"
 
-import os                                                               #For creating directories
-import shutil                                                           #For deleting directories
-import numpy
-import scipy.io.wavfile
-import config                                                           #This is the file where the credentials are stored
-import cPickle                                                          #This is used to dump the models into an object
-
-# import sounddevice
-import speech_recognition                                               #For the speech detection alogrithms
-import matplotlib.pyplot as plt
+import pickle  # This is used to dump the models into an object
 import datetime
-import scipy.cluster
-
+import os  # For creating directories
+import shutil  # For deleting directories
 from collections import defaultdict
-from ltsd import ltsd_main_function                                     #Implementation of LTSD function from https://github.com/shunsukeaihara/pyssp/blob/master/pyssp/vad/ltsd.py
-from fuzzywuzzy import fuzz                                             #For the fuzzy matching algorithms
-from random_words import RandomWords                                    #For generating random words
-from python_speech_features import mfcc                                 #For using the MFCC feature selection
-from sklearn.mixture import GaussianMixture                             #For using the Gausian Mixture Models
+
+import matplotlib.pyplot as plt
+import numpy
+import scipy.cluster
+import scipy.io.wavfile
+import speech_recognition  # For the speech detection alogrithms
+from fuzzywuzzy import fuzz  # For the fuzzy matching algorithms
+from python_speech_features import mfcc  # For using the MFCC feature selection
+from random_words import RandomWords  # For generating random words
 from sklearn import preprocessing
+from sklearn.mixture import \
+    GaussianMixture  # For using the Gausian Mixture Models
+
+import config  # This is the file where the credentials are stored
+from ltsd import \
+    ltsd_main_function  # Implementation of LTSD function from https://github.com/shunsukeaihara/pyssp/blob/master/pyssp/vad/ltsd.py
 
 # import sys
 # import matplotlib.pyplot as plt
@@ -35,7 +36,7 @@ from sklearn import preprocessing
 # from six.moves import xrange
 
 user_directory = 'Testing/test/'
-username = "test"
+username = "Bedang Sen"
 
 WINSIZE = 2048
 fs = 48000
@@ -70,25 +71,25 @@ def create_account():
 
     features_dictionary = defaultdict(list)                             #Creating a default dictionary. dict subclass that calls a factory function to supply missing values.
 
-
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                      Prompting for Username                                                         #
     # ------------------------------------------------------------------------------------------------------------------------------------#
-    # username = input("[ * ] Please enter your username : ")
-    # # print("Username : " + username)
 
-    # user_directory = "Testing\\" + username + "\\"
+    username = input("[ * ] Please enter your username : ")
+    # print("Username : " + username)
 
-    # # Create target directory & all intermediate directories if don't exists
-    # if not os.path.exists(user_directory):
-    #     os.makedirs(user_directory)
-    #     print("[ * ] Directory " , username ,  " Created ...")
-    # else:    
-    #     print("[ * ] Directory " , username ,  " already exists ...")
-    #     print("[ * ] Overwriting existing directory ...")
-    #     shutil.rmtree(user_directory, ignore_errors=False, onerror=None)
-    #     os.makedirs(user_directory)
-    #     print("[ * ] Directory " , username ,  " Created ...")    
+    user_directory = "Testing\\" + username + "\\"
+
+    # Create target directory & all intermediate directories if don't exists
+    if not os.path.exists(user_directory):
+        os.makedirs(user_directory)
+        print("[ * ] Directory " , username ,  " Created ...")
+    else:    
+        print("[ * ] Directory " , username ,  " already exists ...")
+        print("[ * ] Overwriting existing directory ...")
+        shutil.rmtree(user_directory, ignore_errors=False, onerror=None)
+        os.makedirs(user_directory)
+        print("[ * ] Directory " , username ,  " Created ...")    
 
     # # ------------------------------------------------------------------------------------------------------------------------------------#
     # #                                                      Recording background sound                                                     #   ---> Not used!!! 
@@ -114,19 +115,19 @@ def create_account():
     #                                                      Generating random passphrases for enrollment                                   #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-    # print("\n[ * ] Generating random passphrase ...")
+    print("\n[ * ] Generating random passphrase ...")
 
-    # number_of_samples = 3                                                               #Represents the number of voice samples that the application is going to collect. 
-    # speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
-    # # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
-    # speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
+    number_of_samples = 3                                                               #Represents the number of voice samples that the application is going to collect. 
+    speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
+    # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
+    speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
     
-    # for count in range(number_of_samples):                                                              
-    #     print("\nPassphrase [ " + str(count + 1) + " ]")
-    #     audio = generate_words()
+    for count in range(number_of_samples):                                                              
+        print("\nPassphrase [ " + str(count + 1) + " ]")
+        audio = generate_words()
 
-    #     with open(user_directory + "passphrase-microphone-results-" + str(count + 1) + ".wav", "wb") as f:
-    #         f.write(audio.get_wav_data())
+        with open(user_directory + "passphrase-microphone-results-" + str(count + 1) + ".wav", "wb") as f:
+            f.write(audio.get_wav_data())
 
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
@@ -134,7 +135,7 @@ def create_account():
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
     directory = os.fsencode(user_directory)
-    features = np.asarray(())
+    features = numpy.asarray(())
     # print(directory)
 
     for file in os.listdir(directory):
@@ -148,15 +149,15 @@ def create_account():
             extracted_features = extract_features(rate, signal)
 
             if features.size == 0:
-                features = mfcc_feat
+                features = extracted_features
             else:
-                features = np.vstack((features, mfcc_feat))
+                features = numpy.vstack((features, extracted_features))
 
 
             if features.size == 0:
-                features = mfcc_feat
+                features = extracted_features
             else:
-                features = np.vstack((features, mfcc_feat))           
+                features = numpy.vstack((features, extracted_features))           
 
             # features_dictionary[username].extend(mfcc_feat)
         else:
@@ -166,59 +167,74 @@ def create_account():
     #----------------------------------------------------------DUBUG : LTSD and MFCC -----------------------------------------------------#                                                     #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-    # # DEBUG
-    # # print(features_dictionary)
-    # with open(user_directory + "features-dictionary.txt", 'at' ) as features:
-    #     features.write(str(features_dictionary))
+    # DEBUG
+    # print(features_dictionary)
+    with open(user_directory + "features-dictionary.txt", 'at' ) as feat:
+        feat.write(str(features))
 
 
-    # # debug
-    # audio_file = user_directory + "passphrase-microphone-results-1.wav"                                  #For testing purposes. 
-    # result, ltsds = ltsd_main_function(audio_file)
+    # debug
+    audio_file = user_directory + "passphrase-microphone-results-1.wav"                                  #For testing purposes. 
+    result, ltsds = ltsd_main_function(audio_file)
 
-    # # debug
-    # with open(user_directory + "passphrase-microphone-results-after_ltsd.txt", "wt") as f:
-    #     f.write(str(ltsds))
+    # debug
+    with open(user_directory + "passphrase-microphone-results-after_ltsd.txt", "wt") as f:
+        f.write(str(ltsds))
 
-    # # (rate,signal) = scipy.io.wavfile.read(audio_file)
+    # (rate,signal) = scipy.io.wavfile.read(audio_file)
 
-    # # debug
-    # with open(user_directory + "passphrase-microphone-results-rate.txt", "wt") as f:
-    #     f.write(str(rate))
+    # debug
+    with open(user_directory + "passphrase-microphone-results-rate.txt", "wt") as f:
+        f.write(str(rate))
 
-    # # debug
-    # with open(user_directory + "passphrase-microphone-results-signal.txt", "wt") as f:
-    #     f.write(str(signal))
+    # debug
+    with open(user_directory + "passphrase-microphone-results-signal.txt", "wt") as f:
+        f.write(str(signal))
 
-    # # print(signal.shape)
-    # # print(rate)
-    # # print(mfcc_feat.shape)
+    # print(signal.shape)
+    # print(rate)
+    # print(mfcc_feat.shape)
 
-    # # debug
-    # with open(user_directory + "passphrase-microphone-results-mfcc.txt", "w") as f:
-    #     f.write(str(mfcc_feat[0]))
-    #     f.write(str(mfcc_feat.shape))
+    # debug
+    with open(user_directory + "passphrase-microphone-results-mfcc.txt", "w") as f:
+        f.write(str(extracted_features[0]))
+        f.write(str(extracted_features.shape))
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                           Gaussian Mixture Model                                                    #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-    gmm = GMM(n_components = 16,
-                n_iter = 200,
-                covariance_type='diag',
+    print("[ * ] Building Gaussian Mixture Model ...")
+
+    gmm = GaussianMixture(n_components = 16, 
+                max_iter = 200,
+                covariance_type ='diag',
                 n_init = 3)
 
     gmm.fit(features)
+    print("[ * ] Modeling completed for user :" + username + " with data point = " + str(features.shape))
 
     # dumping the trained gaussian model
     # picklefile = path.split("-")[0]+".gmm"
-    cPickle.dump(gmm,open(user_directory + username + ".gmm",'w'))
-    print("[ * ] modeling completed for user :" + username + " with data point = " + features.shape)    
-    features = np.asarray(())
+    print("[ * ] Saving model object ...")
+    pickle.dump(gmm, open("Models/" + str(username) + ".gmm", "wb"), protocol=None)
+    print("[ * ] Object has been successfully written to Models/" + username + ".gmm ...")
+    print("\n\n[ * ] User has been successfully enrolled ...")
+        
+    features = numpy.asarray(())
+
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    #                                                           End of User enrollment                                                    #
+    # ------------------------------------------------------------------------------------------------------------------------------------#
 
 def account_login():
     print("Test you have entered login menu")
+
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    #                                                      Prompting for Username                                                         #
+    # ------------------------------------------------------------------------------------------------------------------------------------#
     
+    # username = input("[ * ] Please enter your username : ")    
 
 def generate_words():
     # obtain audio from the microphone
@@ -320,16 +336,20 @@ def calculate_delta(array):
     (https://appliedmachinelearning.blog/2017/11/14/spoken-speaker-identification-based-on-gaussian-mixture-models-python-implementation/)"""
  
     rows,cols = array.shape
-    deltas = np.zeros((rows,20))
+    deltas = numpy.zeros((rows,20))
     N = 2
     for i in range(rows):
         index = []
         j = 1
         while j <= N:
-            if i-j  rows-1:
-                second = rows-1
+            if i-j < 0:
+                first = 0
             else:
-                second = i+j 
+                first = i-j
+            if i+j > rows -1:
+                second = rows -1
+            else:
+                second = i+j
             index.append((second,first))
             j+=1
         deltas[i] = ( array[index[0][0]]-array[index[0][1]] + (2 * (array[index[1][0]]-array[index[1][1]])) ) / 10
@@ -346,20 +366,19 @@ def extract_features(rate, signal):
                      highfreq=6000,
                      nfilt=55,
                      appendEnergy = False)
-                     )
 
-            mfcc_feat = preprocessing.scale(mfcc_feat)
+    mfcc_feat = preprocessing.scale(mfcc_feat)
 
-            delta_feat = calculate_delta(mfcc_feat)
+    delta_feat = calculate_delta(mfcc_feat)
 
-            combined_features = np.hstack((mfcc_feat,delta_feat))
+    combined_features = numpy.hstack((mfcc_feat,delta_feat))
 
-            return combined_features
+    return combined_features
 
-            # fig = plt.figure()
-            # ax = fig.add_subplot(111)
-            # ax.plot(combined_features)
-            # plt.show()
+    # fig = plt.figure()
+    # ax = fig.add_subplot(111)
+    # ax.plot(combined_features)
+    # plt.show()
 
             
 if __name__ == "__main__":
