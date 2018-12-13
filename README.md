@@ -26,6 +26,18 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
 
 ## Running locally
 
+1. Clone the repository. 
+
+    ```
+    git clone https://github.com/bedangSen/VoiceSens.git
+    ```
+    
+1. Move into the project directory. 
+
+    ```
+    cd VoiceSens
+    ```
+    
 1. Run the application.
 
     ```
