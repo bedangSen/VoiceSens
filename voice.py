@@ -151,13 +151,7 @@ def create_account():
             if features.size == 0:
                 features = extracted_features
             else:
-                features = numpy.vstack((features, extracted_features))
-
-
-            if features.size == 0:
-                features = extracted_features
-            else:
-                features = numpy.vstack((features, extracted_features))           
+                features = numpy.vstack((features, extracted_features))        
 
             # features_dictionary[username].extend(mfcc_feat)
         else:
@@ -230,11 +224,90 @@ def create_account():
 def account_login():
     print("Test you have entered login menu")
 
+    user_directory = "Models/"
+    username = "test"                         #Test only!
+    user_exist = False
+
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                      Prompting for Username                                                         #
     # ------------------------------------------------------------------------------------------------------------------------------------#
     
-    # username = input("[ * ] Please enter your username : ")    
+    # username = input("[ * ] Please enter your username : ")
+
+    # directory = os.fsencode(user_directory)
+    # # print(directory)
+
+    # for file in os.listdir(directory):
+    #     filename = os.fsdecode(file)
+    #     # print(filename) #debug
+    #     if filename.startswith(username):
+    #         # print("The user exists!")
+    #         user_exist = True
+    #         break
+    #     else:
+    #         pass
+    
+    # if user_exist:
+    #     print("The user does exists!")
+    # else:
+    #     print("The user does not exists!")
+
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    #                                                  Generating random passphrases for Authentication                                   #
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+
+    # print("\n[ * ] Generating random passphrase ...")
+
+    # speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
+    # # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
+    # speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
+    
+    # print("\n[ Authentication Passphrase ]")
+    # audio = generate_words()
+
+    # with open(user_directory + "passphrase-authentication-results.wav", "wb") as f:
+    #         f.write(audio.get_wav_data())
+
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    #                                                                   LTSD and MFCC                                                     #
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+
+    # (rate, signal) = scipy.io.wavfile.read(audio.get_wav_data())
+    (rate, signal) = scipy.io.wavfile.read(user_directory + "passphrase-authentication-results.wav")
+    
+    extracted_features = extract_features(rate, signal)
+
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+    #                                                          Loading the Gaussian Models                                                #
+    # ------------------------------------------------------------------------------------------------------------------------------------#
+
+    gmm_models = [os.path.join(user_directory, user) 
+                    for user in os.listdir(user_directory)
+                     if user.endswith('.gmm')]
+
+    # print("GMM Models : " + str(gmm_models))
+
+    #Load the Gaussian user Models
+    models = [pickle.load(open(user,'rb')) for user in gmm_models]
+
+    user_list = [user.split("/")[-1].split(".gmm")[0] 
+                    for user in gmm_models]
+
+    log_likelihood = numpy.zeros(len(models))
+
+    for i in range(len(models)):
+        gmm    = models[i]         #checking with each model one by one
+        scores = numpy.array(gmm.score(extracted_features))
+        log_likelihood[i] = scores.sum()
+    
+    identified_user = numpy.argmax(log_likelihood)
+
+    print("Identified User : " + user_list[identified_user])
+    
+    if user_list[identified_user] == username:
+        print("You have been authenticated!")
+    else:
+        print("Sorry you have not been authenticated")
 
 def generate_words():
     # obtain audio from the microphone
