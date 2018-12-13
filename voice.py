@@ -232,41 +232,42 @@ def account_login():
     #                                                      Prompting for Username                                                         #
     # ------------------------------------------------------------------------------------------------------------------------------------#
     
-    # username = input("[ * ] Please enter your username : ")
+    username = input("[ * ] Please enter your username : ")
 
-    # directory = os.fsencode(user_directory)
-    # # print(directory)
+    directory = os.fsencode(user_directory)
+    # print(directory)
 
-    # for file in os.listdir(directory):
-    #     filename = os.fsdecode(file)
-    #     # print(filename) #debug
-    #     if filename.startswith(username):
-    #         # print("The user exists!")
-    #         user_exist = True
-    #         break
-    #     else:
-    #         pass
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        # print(filename) #debug
+        if filename.startswith(username):
+            # print("The user exists!")
+            user_exist = True
+            break
+        else:
+            pass
     
-    # if user_exist:
-    #     print("The user does exists!")
-    # else:
-    #     print("The user does not exists!")
+    if user_exist:
+        print("[ * ] The user does exists!")
+    else:
+        print("[ * ] The user does not exists!")
+        return
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                  Generating random passphrases for Authentication                                   #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-    # print("\n[ * ] Generating random passphrase ...")
+    print("\n[ * ] Generating random passphrase ...")
 
-    # speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
-    # # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
-    # speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
+    speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
+    # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
+    speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
     
-    # print("\n[ Authentication Passphrase ]")
-    # audio = generate_words()
+    print("\n[ Authentication Passphrase ]")
+    audio = generate_words()
 
-    # with open(user_directory + "passphrase-authentication-results.wav", "wb") as f:
-    #         f.write(audio.get_wav_data())
+    with open(user_directory + "passphrase-authentication-results.wav", "wb") as f:
+            f.write(audio.get_wav_data())
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                                   LTSD and MFCC                                                     #
@@ -302,12 +303,12 @@ def account_login():
     
     identified_user = numpy.argmax(log_likelihood)
 
-    print("Identified User : " + user_list[identified_user])
+    print("[ * ] Identified User : " + user_list[identified_user])
     
     if user_list[identified_user] == username:
-        print("You have been authenticated!")
+        print("[ * ] You have been authenticated!")
     else:
-        print("Sorry you have not been authenticated")
+        print("[ * ] Sorry you have not been authenticated")
 
 def generate_words():
     # obtain audio from the microphone
@@ -343,21 +344,10 @@ def generate_words():
     # recognize speech using IBM Speech to Text
     try:
         recognised_words_ibm = speech_recognition.Recognizer().recognize_ibm(audio, username=config.IBM_USERNAME, password=config.IBM_PASSWORD)
+        recognised_words = recognised_words_ibm
         print("IBM Speech to Text thinks you said : " + recognised_words_ibm)
         print("IBM Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words_ibm)))
         print("IBM Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words_ibm)))
-
-        if fuzz.ratio(random_words, recognised_words_ibm) < 65:
-            print("\nThe words you have spoken aren't entirely correct. Please try again ...")
-            audio = generate_words()
-            # print("This means that the function returned from the if condition : type - [" + str(type(audio)) + "]")
-        else:
-                # print("This means that the function returned the first time : type - [" + str(type(audio)) + "]")
-                # return audio
-                pass
-
-        # print("This means that the function returned not the first time : type - [" + str(type(audio)) + "]")
-        # return audio     
 
     except speech_recognition.UnknownValueError:
         print("IBM Speech to Text could not understand audio")
@@ -368,41 +358,49 @@ def generate_words():
         print("\nPlease try again ...")
         audio = generate_words()
 
-    return audio
-
     # # recognize speech using Google Speech Recognition
     # try:
     #     # for testing purposes, we're just using the default API key
     #     # to use another API key, use `speech_recognition.Recognizer().recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
     #     # instead of `speech_recognition.Recognizer().recognize_google(audio)`
     #     recognised_words_google = speech_recognition.Recognizer().recognize_google(audio)
+    #     recognised_words = recognised_words_google
     #     print("Google Speech Recognition thinks you said : " + recognised_words_google)
     #     print("Google Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words_google)))
     #     print("Google Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words_google)))
         
     # except speech_recognition.UnknownValueError:
     #     print("Google Speech Recognition could not understand audio")
+    #     print("\nPlease try again ...")
+    #     audio = generate_words()
     # except speech_recognition.RequestError as e:
     #     print("Could not request results from Google Speech Recognition service; {0}".format(e))
-
-
-    # if fuzz.ratio(random_words, recognised_words_ibm) < 65 or fuzz.ratio(random_words, recognised_words_google) < 65:
-    #     print("\nThe words you have spoken aren't entirely correct. Please try again ...")
-    #     generate_words()
-    # else:
-    #     return audio
-             
-    
+    #     print("\nPlease try again ...")
+    #     audio = generate_words()
 
     # # recognize speech using Microsoft Bing Voice Recognition
     # BING_KEY = "6198a48cf6db495198f0123f3ecb8754"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
+    
     # try:
     #     recognised_words_microsoft = speech_recognition.Recognizer().recognize_bing(audio, key=BING_KEY)
+    #     recognised_words = recognised_words_microsoft
     #     print("Microsoft Bing Voice Recognition thinks you said : " + recognised_words_microsoft)
     # except speech_recognition.UnknownValueError:
     #     print("Microsoft Bing Voice Recognition could not understand audio")
+    #     print("\nPlease try again ...")
+    #     audio = generate_words()
     # except speech_recognition.RequestError as e:
     #     print("Could not request results from Microsoft Bing Voice Recognition service; {0}".format(e))
+    #     print("\nPlease try again ...")
+    #     audio = generate_words()
+
+    if fuzz.ratio(random_words, recognised_words) < 65:
+        print("\nThe words you have spoken aren't entirely correct. Please try again ...")
+        generate_words()
+    else:
+        pass
+    
+    return audio
 
 def calculate_delta(array):
     """Calculate and returns the delta of given feature vector matrix 
