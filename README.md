@@ -65,3 +65,4 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
 * Hashing the audio files and signing it with the clients private key, to prevent man in the middle attacks. 
 * Working on the front end. 
 * Improve the accuracy of the GMM model. 
+* Add solution architecture.
