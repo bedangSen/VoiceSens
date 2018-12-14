@@ -1,0 +1,13 @@
+matplotlib==2.2.3
+numpy==1.15.1
+numpydoc==0.8.0
+scikit-image==0.14.0
+scikit-learn==0.19.2
+scipy==1.1.0
+SpeechRecognition==3.8.1
+fuzzywuzzy==0.17.0
+python-dateutil==2.7.3
+python-Levenshtein==0.12.0
+python-speech-features==0.6
+pyssp==0.1.9.6
+RandomWords==0.2.1

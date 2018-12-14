@@ -200,22 +200,19 @@ def account_login():
     username = input("[ * ] Please enter your username : ")
 
     directory = os.fsencode(user_directory)
-    # print(directory)
 
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-        # print(filename) #debug
         if filename.startswith(username):
-            # print("The user exists!")
             user_exist = True
             break
         else:
             pass
     
     if user_exist:
-        print("[ * ] The user does exists!")
+        print("[ * ] The user profile exists ...")
     else:
-        print("[ * ] The user does not exists!")
+        print("[ * ] The user profile does not exists ...")
         return
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
@@ -265,10 +262,12 @@ def account_login():
         gmm    = models[i]         #checking with each model one by one
         scores = numpy.array(gmm.score(extracted_features))
         log_likelihood[i] = scores.sum()
-    
+
+    print("Log liklihood : " + str(log_likelihood))
+
     identified_user = numpy.argmax(log_likelihood)
 
-    print("[ * ] Identified User : " + user_list[identified_user])
+    print("[ * ] Identified User : " + str(identified_user) + " - " + user_list[identified_user])
     
     if user_list[identified_user] == username:
         print("[ * ] You have been authenticated!")
@@ -395,12 +394,14 @@ def extract_features(rate, signal):
     
     mfcc_feat = mfcc(signal,
                      rate,
-                    #  winlen=0.030,               #remove if not requred
+                     winlen=0.020,               #remove if not requred
                      preemph=0.95,
                      numcep=20,
+                     nfft=1024,
                      ceplifter=15,
                      highfreq=6000,
                      nfilt=55,
+
                      appendEnergy = False)
 
     mfcc_feat = preprocessing.scale(mfcc_feat)
