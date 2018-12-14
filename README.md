@@ -87,3 +87,4 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
 * Working on the front end. 
 * Improve the accuracy of the GMM model. 
 * Add solution architecture.
+* Storing the models in a secure Object storage
