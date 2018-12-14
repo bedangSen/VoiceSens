@@ -1,8 +1,7 @@
 #!/uspeech_recognition/bin/env python3
 """
-This is a demo for a voice authentication application
+This is a demo for a voice biometrics application
 """
-
 __author__ = "Bedang Sen"
 __version__ = "0.1.0"
 __license__ = "none"
