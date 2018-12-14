@@ -106,63 +106,58 @@ def create_account():
 
     directory = os.fsencode(user_directory)
     features = numpy.asarray(())
-    # print(directory)
 
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-        # print(filename) #debug
         if filename.endswith(".wav"):
-            # pass
-            # print(filename) #debug
-            (rate, signal) = scipy.io.wavfile.read(user_directory + filename)
 
+            (rate, signal) = scipy.io.wavfile.read(user_directory + filename)
             extracted_features = extract_features(rate, signal)
 
             if features.size == 0:
                 features = extracted_features
             else:
-                features = numpy.vstack((features, extracted_features))        
+                features = numpy.vstack((features, extracted_features)) 
 
-            # features_dictionary[username].extend(mfcc_feat)
         else:
             continue
 
     #-------------------------------------------------------------------------------------------------------------------------------------#
-    #----------------------------------------------------------DUBUG : LTSD and MFCC -----------------------------------------------------#                                                     #
+    #----------------------------------------------------------     DUBUG : MFCC     -----------------------------------------------------#                                                     #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-    # DEBUG
-    # print(features_dictionary)
-    with open(user_directory + "features-dictionary.txt", 'at' ) as feat:
-        feat.write(str(features))
+    # # DEBUG
+    # # print(features_dictionary)
+    # with open(user_directory + "features-dictionary.txt", 'at' ) as feat:
+    #     feat.write(str(features))
 
 
-    # debug
-    audio_file = user_directory + "passphrase-microphone-results-1.wav"                                  #For testing purposes. 
-    result, ltsds = ltsd_main_function(audio_file)
+    # # debug
+    # audio_file = user_directory + "passphrase-microphone-results-1.wav"                                  #For testing purposes. 
+    # result, ltsds = ltsd_main_function(audio_file)
 
-    # debug
-    with open(user_directory + "passphrase-microphone-results-after_ltsd.txt", "wt") as f:
-        f.write(str(ltsds))
+    # # debug
+    # with open(user_directory + "passphrase-microphone-results-after_ltsd.txt", "wt") as f:
+    #     f.write(str(ltsds))
 
-    # (rate,signal) = scipy.io.wavfile.read(audio_file)
+    # # (rate,signal) = scipy.io.wavfile.read(audio_file)
 
-    # debug
-    with open(user_directory + "passphrase-microphone-results-rate.txt", "wt") as f:
-        f.write(str(rate))
+    # # debug
+    # with open(user_directory + "passphrase-microphone-results-rate.txt", "wt") as f:
+    #     f.write(str(rate))
 
-    # debug
-    with open(user_directory + "passphrase-microphone-results-signal.txt", "wt") as f:
-        f.write(str(signal))
+    # # debug
+    # with open(user_directory + "passphrase-microphone-results-signal.txt", "wt") as f:
+    #     f.write(str(signal))
 
-    # print(signal.shape)
-    # print(rate)
-    # print(mfcc_feat.shape)
+    # # print(signal.shape)
+    # # print(rate)
+    # # print(mfcc_feat.shape)
 
-    # debug
-    with open(user_directory + "passphrase-microphone-results-mfcc.txt", "w") as f:
-        f.write(str(extracted_features[0]))
-        f.write(str(extracted_features.shape))
+    # # debug
+    # with open(user_directory + "passphrase-microphone-results-mfcc.txt", "w") as f:
+    #     f.write(str(extracted_features[0]))
+    #     f.write(str(extracted_features.shape))
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                           Gaussian Mixture Model                                                    #
