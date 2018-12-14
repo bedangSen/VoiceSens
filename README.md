@@ -4,7 +4,7 @@
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 1. Sign up for an [IBM Cloud account](https://console.bluemix.net/registration/).
 1. Create an instance of the Speech to Text service and get your credentials:
@@ -46,13 +46,13 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
     
 1. Installing the PyAudio library.
 
-    2. If you are using a Unix machine, install the library using the following command. 
+    1. If you are using a Unix machine, install the library using the following command. 
     
         ```
         pip install PyAudio
         ```
         
-    2. If you are using a Windows machine, install the file manually by the following command. 
+    1. If you are using a Windows machine, install the file manually by the following command. 
     
         ```
         pip install PyAudio-0.2.11-cp37-cp37m-win_amd64.whl
@@ -87,3 +87,4 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
 * Working on the front end. 
 * Improve the accuracy of the GMM model. 
 * Add solution architecture.
+* Storing the models in a secure Object storage
