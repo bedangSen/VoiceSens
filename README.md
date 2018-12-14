@@ -6,7 +6,8 @@
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-1. Install and set up Python 3. 
+1. Install and set up Python 3.
+1. Make sure PortAudio is installed on your system.   
 1. Sign up for an [IBM Cloud account](https://console.bluemix.net/registration/).
 1. Create an instance of the Speech to Text service and get your credentials:
     - Go to the [Speech to Text](https://console.bluemix.net/catalog/services/speech-to-text) page in the IBM Cloud Catalog.
@@ -46,8 +47,15 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
     ```
     
 1. Installing the PyAudio library.
-
-    * Follow the instructions to install PyAudio based on your OS. [Here](https://people.csail.mit.edu/hubert/pyaudio/)
+     
+    1. If you are using a Unix machine, install the library using the following command. 
+        ```
+        pip install PyAudio
+        ```       
+    1. If you are using a Windows machine, install the file manually by the following command. 
+        ```
+        pip install PyAudio-0.2.11-cp37-cp37m-win_amd64.whl
+        ```
     
 1. Run the application.
 
