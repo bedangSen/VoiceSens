@@ -86,7 +86,7 @@ def create_account():
 
     print("\n[ * ] Generating random passphrase ...")
 
-    number_of_samples = 1                                                               #Represents the number of voice samples that the application is going to collect. 
+    number_of_samples = 3                                                               #Represents the number of voice samples that the application is going to collect. 
     speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
     # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
     speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
