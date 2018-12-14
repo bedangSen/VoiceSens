@@ -26,8 +26,6 @@ from sklearn.mixture import \
     GaussianMixture  # For using the Gausian Mixture Models
 
 import config  # This is the file where the credentials are stored
-from ltsd import \
-    ltsd_main_function  # Implementation of LTSD function from https://github.com/shunsukeaihara/pyssp/blob/master/pyssp/vad/ltsd.py
 
 # import sys
 # import matplotlib.pyplot as plt
@@ -35,13 +33,9 @@ from ltsd import \
 # from pyssp.util import get_frame, read_signal
 # from six.moves import xrange
 
+#Defualt values used for testing. 
 user_directory = 'Testing/test/'
 username = "Bedang Sen"
-
-WINSIZE = 2048
-fs = 48000
-# sounddevice.default.samplerate = fs
-# sounddevice.default.channels = 2
 
 def main():
     """ Main entry point of the app """
@@ -50,7 +44,6 @@ def main():
 
 def menu_option():
     """ Prompts the user for a menu option. Options include creating a new account or logging in to an existing account. """
-
     
     account_option = input("\nWould you like to login(L) or create a new account(C)? ")
 
@@ -69,16 +62,13 @@ def menu_option():
 def create_account():
     """ The Create Account Module : Allows user to create a user profile to store the voice """ 
 
-    features_dictionary = defaultdict(list)                             #Creating a default dictionary. dict subclass that calls a factory function to supply missing values.
-
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                      Prompting for Username                                                         #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
     username = input("[ * ] Please enter your username : ")
-    # print("Username : " + username)
 
-    user_directory = "Testing\\" + username + "\\"
+    user_directory = "Testing/" + username + "/"
 
     # Create target directory & all intermediate directories if don't exists
     if not os.path.exists(user_directory):
@@ -90,26 +80,6 @@ def create_account():
         shutil.rmtree(user_directory, ignore_errors=False, onerror=None)
         os.makedirs(user_directory)
         print("[ * ] Directory " , username ,  " Created ...")    
-
-    # # ------------------------------------------------------------------------------------------------------------------------------------#
-    # #                                                      Recording background sound                                                     #   ---> Not used!!! 
-    # # ------------------------------------------------------------------------------------------------------------------------------------#
-
-    # print("[ * ] Scanning environmental sound. Please remain silent ...")
-
-    # duration = 5  # seconds
-    # background_recording = sounddevice.rec(int(duration * fs))
-    # print("[ * ] Scanning ...")
-    
-    # # Recording completed
-    # sounddevice.wait()
-    # print("[ * ] Scanning complete ...")
-
-    # # input("[ DEBUG ] : Enter to proceed ...")
-    # # print("[ DEBUG ] : Playing back recorded sound ...")
-    # # sounddevice.play(background_recording)
-    # # sounddevice.wait()
-    # # print("[ DEBUG ] : Playback complete ...")
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                      Generating random passphrases for enrollment                                   #
@@ -131,7 +101,7 @@ def create_account():
 
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
-    #                                                                   LTSD and MFCC                                                     #
+    #                                                                   MFCC                                                              #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
     directory = os.fsencode(user_directory)
