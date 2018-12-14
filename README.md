@@ -47,17 +47,7 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
     
 1. Installing the PyAudio library.
 
-    1. If you are using a Unix machine, install the library using the following command. 
-    
-        ```
-        pip install PyAudio
-        ```
-        
-    1. If you are using a Windows machine, install the file manually by the following command. 
-    
-        ```
-        pip install PyAudio-0.2.11-cp37-cp37m-win_amd64.whl
-        ```
+    * Follow the instructions to install PyAudio based on your OS. [Here](https://people.csail.mit.edu/hubert/pyaudio/)
     
 1. Run the application.
 
