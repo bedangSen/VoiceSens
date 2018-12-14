@@ -86,7 +86,7 @@ def create_account():
 
     print("\n[ * ] Generating random passphrase ...")
 
-    number_of_samples = 3                                                               #Represents the number of voice samples that the application is going to collect. 
+    number_of_samples = 1                                                               #Represents the number of voice samples that the application is going to collect. 
     speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
     # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
     speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
@@ -97,7 +97,6 @@ def create_account():
 
         with open(user_directory + "passphrase-microphone-results-" + str(count + 1) + ".wav", "wb") as f:
             f.write(audio.get_wav_data())
-
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                                   MFCC                                                              #
@@ -111,6 +110,14 @@ def create_account():
         if filename.endswith(".wav"):
 
             (rate, signal) = scipy.io.wavfile.read(user_directory + filename)
+
+            # fig = plt.figure()
+            # ax = fig.add_subplot(111)
+            # ax.plot(signal)
+            # plt.show()
+
+            # print(str(signal))
+
             extracted_features = extract_features(rate, signal)
 
             if features.size == 0:
@@ -278,8 +285,6 @@ def generate_words():
 
     with speech_recognition.Microphone() as source:
 
-        random_words = RandomWords().random_words(count=5)
-
         # random_words = RandomWords().get_random_words(
         #     hasDictionaryDef="true",
         #     includePartOfSpeech="noun,verb",
@@ -293,12 +298,14 @@ def generate_words():
         #     # sortOrder="asc",
         #     limit=5)
 
-        print(random_words)
-
         print("[ * ] Scanning environmental sound. Please remain silent ...")
         speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration = 5)      #Adjusts the energy threshold dynamically using audio from source (an AudioSource instance) to account for ambient noise.
         print("[ * ] Scanning complete ...")
         print("[ * ] Recite the passphrase to train the voice model ...")
+
+        random_words = RandomWords().random_words(count=5)
+        print("\n")
+        print(random_words)
         
         audio = speech_recognition.Recognizer().listen(source, timeout = 10)            
         
