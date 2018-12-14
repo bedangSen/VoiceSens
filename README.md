@@ -58,6 +58,7 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
 ## References
 
 * [Digital Signal Processing : Speeker Recognition Final Report](https://raw.githubusercontent.com/ppwwyyxxspeaker-recognition/master/doc/Final-Report-Complete.pdf)
+* [MFCC](http://practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/)
 
 ## To Do
 
