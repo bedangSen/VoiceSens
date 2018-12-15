@@ -38,6 +38,30 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
     ```
     cd VoiceSens
     ```
+ 
+1. (Optional) Running it in a virtual environment. 
+
+   1. Downloading and installing _virtualenv_. 
+   ```
+   pip install virtualenv
+   ```
+   
+   1. Create the virtual environment in Python 3.
+    ```
+    virtualenv -p C:\Python37\python.exe test_env
+    ```
+    
+    1. Activate the test environment. 
+    
+        1. For Windows:
+        ```
+        test_env\Scripts\Activate
+        ```
+        
+        1. For Unix:
+        ```
+        source test_env/bin/activate
+        ```
     
 1. Install all the required libraries, by installing the requirements.txt file.
 
