@@ -46,23 +46,24 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
    pip install virtualenv
    ```
    
-   1. Create the virtual environment in Python 3.
-    ```
+   2. Create the virtual environment in Python 3.
+   
+   ```
     virtualenv -p C:\Python37\python.exe test_env
-    ```
-    
-    1. Activate the test environment. 
-    
+    ```    
+   
+   3. Activate the test environment.     
+   
         1. For Windows:
         ```
         test_env\Scripts\Activate
-        ```
+        ```        
         
-        1. For Unix:
+        2. For Unix:
         ```
         source test_env/bin/activate
-        ```
-    
+        ```    
+
 1. Install all the required libraries, by installing the requirements.txt file.
 
     ```
