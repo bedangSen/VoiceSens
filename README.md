@@ -106,7 +106,7 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
 
 ## To Do
 
-* Implement own speach recognition to service using the updated IBM credentials service. (IBM Watson no longer provides _username_ and _password_)
+* Make a pull request to the SpeechRecognition Library to update the ibm_recognize serivice to the updated IBM credentials service. (IBM Watson no longer provides _username_ and _password_)
 * Hashing the audio files and signing it with the clients private key, to prevent man in the middle attacks. 
 * Working on the front end. 
 * Improve the accuracy of the GMM model. 
