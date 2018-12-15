@@ -132,10 +132,10 @@ def create_account():
     #----------------------------------------------------------     DUBUG : MFCC     -----------------------------------------------------#                                                     #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-    # # DEBUG
-    # # print(features_dictionary)
-    # with open(user_directory + "features-dictionary.txt", 'at' ) as feat:
-    #     feat.write(str(features))
+    # DEBUG
+    # print(features_dictionary)
+    with open(user_directory + "features-dictionary.txt", 'at' ) as feat:
+        feat.write(str(features))
 
 
     # # debug
@@ -148,22 +148,22 @@ def create_account():
 
     # # (rate,signal) = scipy.io.wavfile.read(audio_file)
 
-    # # debug
-    # with open(user_directory + "passphrase-microphone-results-rate.txt", "wt") as f:
-    #     f.write(str(rate))
+    # debug
+    with open(user_directory + "passphrase-microphone-results-rate.txt", "wt") as f:
+        f.write(str(rate))
 
-    # # debug
-    # with open(user_directory + "passphrase-microphone-results-signal.txt", "wt") as f:
-    #     f.write(str(signal))
+    # debug
+    with open(user_directory + "passphrase-microphone-results-signal.txt", "wt") as f:
+        f.write(str(signal))
 
-    # # print(signal.shape)
-    # # print(rate)
-    # # print(mfcc_feat.shape)
+    # print(signal.shape)
+    # print(rate)
+    # print(mfcc_feat.shape)
 
-    # # debug
-    # with open(user_directory + "passphrase-microphone-results-mfcc.txt", "w") as f:
-    #     f.write(str(extracted_features[0]))
-    #     f.write(str(extracted_features.shape))
+    # debug
+    with open(user_directory + "passphrase-microphone-results-mfcc.txt", "w") as f:
+        f.write(str(extracted_features[0]))
+        f.write(str(extracted_features.shape))
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                           Gaussian Mixture Model                                                    #
