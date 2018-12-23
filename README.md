@@ -7,7 +7,6 @@
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 1. Install and set up Python 3.
-1. Make sure PortAudio is installed on your system.   
 1. Sign up for an [IBM Cloud account](https://console.bluemix.net/registration/).
 1. Create an instance of the Speech to Text service and get your credentials:
     - Go to the [Speech to Text](https://console.bluemix.net/catalog/services/speech-to-text) page in the IBM Cloud Catalog.
@@ -39,7 +38,32 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
     ```
     cd VoiceSens
     ```
-    
+ 
+1. (Optional) Running it in a virtual environment. 
+
+   1. Downloading and installing _virtualenv_. 
+   ```
+   pip install virtualenv
+   ```
+   
+   2. Create the virtual environment in Python 3.
+   
+   ```
+    virtualenv -p C:\Python37\python.exe test_env
+    ```    
+   
+   3. Activate the test environment.     
+   
+        1. For Windows:
+        ```
+        test_env\Scripts\Activate
+        ```        
+        
+        2. For Unix:
+        ```
+        source test_env/bin/activate
+        ```    
+
 1. Install all the required libraries, by installing the requirements.txt file.
 
     ```
@@ -78,10 +102,11 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
 
 * [Digital Signal Processing : Speeker Recognition Final Report](https://raw.githubusercontent.com/ppwwyyxxspeaker-recognition/master/doc/Final-Report-Complete.pdf)
 * [MFCC](http://practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/)
+* [Speech Recognition with Python](https://realpython.com/python-speech-recognition/)
 
 ## To Do
 
-* Implement own speach recognition to service using the updated IBM credentials service. (IBM Watson no longer provides _username_ and _password_)
+* Make a pull request to the SpeechRecognition Library to update the ibm_recognize serivice to the updated IBM credentials service. (IBM Watson no longer provides _username_ and _password_)
 * Hashing the audio files and signing it with the clients private key, to prevent man in the middle attacks. 
 * Working on the front end. 
 * Improve the accuracy of the GMM model. 
