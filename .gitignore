@@ -10,10 +10,10 @@ config.pyc
 .vscode/
 
 # Ignore the Testing folder.
-Testing\
+Testing/
 
 # Ignore the Testing folder.
-_pycache_\
+_pycache_/
 
 # Ignore the Feedbacak file.
-Feedback
+"Feedback"
