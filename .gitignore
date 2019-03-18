@@ -3,3 +3,6 @@ config.pyc
 Models\passphrase-authentication-results.wav 
 "*.wav" 
 *.wav 
+.vscode
+Testing
+Feedback
