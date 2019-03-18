@@ -13,7 +13,7 @@ config.pyc
 Testing/
 
 # Ignore the Testing folder.
-_pycache_/
+__pycache__/
 
 # Ignore the Feedbacak file.
-"Feeback"
+Feeback
