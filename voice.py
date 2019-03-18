@@ -2,9 +2,6 @@
 """
 This is a demo for a voice biometrics application
 """
-__author__ = "Bedang Sen"
-__version__ = "0.1.0"
-__license__ = "none"
 
 import pickle  # This is used to dump the models into an object
 import datetime
@@ -25,6 +22,10 @@ from sklearn.mixture import \
     GaussianMixture  # For using the Gausian Mixture Models
 
 import config  # This is the file where the credentials are stored
+
+from flask import Flask, jsonify
+
+app = Flask(__name__)
 
 # import sys
 # import matplotlib.pyplot as plt
