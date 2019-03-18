@@ -23,9 +23,9 @@ from sklearn.mixture import \
 
 import config  # This is the file where the credentials are stored
 
-from flask import Flask, jsonify
+# from flask import Flask, jsonify
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 # import sys
 # import matplotlib.pyplot as plt
