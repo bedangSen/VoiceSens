@@ -17,3 +17,6 @@ __pycache__/
 
 # Ignore the Feedbacak file.
 Feeback
+
+# Ignore the Flask Virtual environement
+flask-env/
