@@ -1,8 +1,19 @@
+# Ignoring the Configuration files.
 config.py 
 config.pyc 
-Models\passphrase-authentication-results.wav 
+
+# Ignoring all the wav files.  
 "*.wav" 
 *.wav 
-.vscode
-Testing
+
+# Ignore the .vscode folder. 
+.vscode/
+
+# Ignore the Testing folder.
+Testing\
+
+# Ignore the Testing folder.
+_pycache_\
+
+# Ignore the Feedbacak file.
 Feedback
