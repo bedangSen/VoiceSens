@@ -5,9 +5,6 @@
     <title>VoiceSens Web Applicaiton</title>
     <link rel="stylesheet" type="text/css" href="../static/stylesheets/semantic.min.css" />
     <link rel="stylesheet" type="text/css" href="../static/stylesheets/example.css" />
-    <script src="../static/javascript/blah.js"></script>
-    <script src="https://unpkg.com/wavesurfer.js"></script>
-    <script src="../static/javascript/wavesurfer.microphone.min.js"></script>
 
   </head>
 
@@ -31,10 +28,9 @@
 
 
           <div id="waveform"></div>
-          <!-- <button class="fluid ui compact labeled icon toggle button">
-            <i class="pause icon"></i>
-            Start Recording
-          </button> -->
+
+          <button id="startRecButton" type="button" name="button">Record</button>
+          <button id="stopRecButton" type="button" name="button">Stop</button>
 
 
            <div id="environmentMessage" class="ui red icon message">
@@ -47,7 +43,7 @@
             </div>
           </div>
 
-          <!-- <div id="passphraseMessage" class="ui yellow icon message">
+          <div id="passphraseMessage" class="ui yellow icon message">
            <i class="notched circle loading icon"></i>
            <div class="content">
              <div class="header">
@@ -75,7 +71,7 @@
            </div>
            <p id="recordBody">Your voice enrollment was not succesful. Please try again. </p>
          </div>
-       </div> -->
+       </div>
 
 
 
@@ -94,54 +90,11 @@
     </div>
   </body>
 
-  <script src="js/WebAudioRecorder.min.js"></script>
-  <script src="js/app.js"></script>
-  <script type="text/javascript">
-    var wavesurfer = WaveSurfer.create({
-      container     : '#waveform',
-      waveColor     : '#01BAB6',
-      interact      : false,
-      cursorWidth   : 0,
-      // barGap        : 0,
-      // barHeight     : 2,
-      // barWidth      : 5,
-      // fillParent    : true,
-      // forceDecode   : true,
-      plugins: [
-        WaveSurfer.microphone.create()
-      ]
-    });
 
-    wavesurfer.microphone.on('deviceReady', function(stream) {
-        console.log('Device ready!', stream);
-    });
-    wavesurfer.microphone.on('deviceError', function(code) {
-        console.warn('Device error: ' + code);
-    });
-
-    // start the microphone
-    wavesurfer.microphone.start();
-
-    // pause rendering
-    //wavesurfer.microphone.pause();
-
-    // resume rendering
-    //wavesurfer.microphone.play();
-
-    // stop visualization and disconnect microphone
-    //wavesurfer.microphone.stopDevice();
-
-    // same as stopDevice() but also clears the wavesurfer canvas
-    //wavesurfer.microphone.stop();
-
-    // destroy the plugin
-    //wavesurfer.microphone.destroy();
-
-
-
-
-
-
-  </script>
+  <script src="https://unpkg.com/wavesurfer.js"></script>
+  <script src="../static/javascript/p5.min.js"></script>
+  <script src="../static/javascript/p5.sound.min.js"></script>
+  <script src="../static/javascript/wavesurfer.microphone.min.js"></script>
+  <script src="../static/javascript/voice.js"></script>
 
 </html>

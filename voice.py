@@ -33,18 +33,18 @@ import config  # This is the file where the credentials are stored
 # from pyssp.util import get_frame, read_signal
 # from six.moves import xrange
 
-#Defualt values used for testing. 
+#Defualt values used for testing.
 user_directory = 'Testing/test/'
 username = "Bedang Sen"
 
 def main():
     """ Main entry point of the app """
     menu_option()
-    
+
 
 def menu_option():
     """ Prompts the user for a menu option. Options include creating a new account or logging in to an existing account. """
-    
+
     account_option = input("\nWould you like to login(L) or create a new account(C)? ")
 
     if account_option=="L" or account_option=="l":
@@ -60,7 +60,7 @@ def menu_option():
         menu_option()
 
 def create_account():
-    """ The Create Account Module : Allows user to create a user profile to store the voice """ 
+    """ The Create Account Module : Allows user to create a user profile to store the voice """
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                      Prompting for Username                                                         #
@@ -74,12 +74,12 @@ def create_account():
     if not os.path.exists(user_directory):
         os.makedirs(user_directory)
         print("[ * ] Directory " , username ,  " Created ...")
-    else:    
+    else:
         print("[ * ] Directory " , username ,  " already exists ...")
         print("[ * ] Overwriting existing directory ...")
         shutil.rmtree(user_directory, ignore_errors=False, onerror=None)
         os.makedirs(user_directory)
-        print("[ * ] Directory " , username ,  " Created ...")    
+        print("[ * ] Directory " , username ,  " Created ...")
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                      Generating random passphrases for enrollment                                   #
@@ -87,12 +87,12 @@ def create_account():
 
     print("\n[ * ] Generating random passphrase ...")
 
-    number_of_samples = 3                                                               #Represents the number of voice samples that the application is going to collect. 
-    speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
-    # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
-    speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
-    
-    for count in range(number_of_samples):                                                              
+    number_of_samples = 3                                                               #Represents the number of voice samples that the application is going to collect.
+    # speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase.
+    # # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
+    # speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening.
+
+    for count in range(number_of_samples):
         print("\nPassphrase [ " + str(count + 1) + " ]")
         audio = generate_words()
 
@@ -124,7 +124,7 @@ def create_account():
             if features.size == 0:
                 features = extracted_features
             else:
-                features = numpy.vstack((features, extracted_features)) 
+                features = numpy.vstack((features, extracted_features))
 
         else:
             continue
@@ -140,7 +140,7 @@ def create_account():
 
 
     # # debug
-    # audio_file = user_directory + "passphrase-microphone-results-1.wav"                                  #For testing purposes. 
+    # audio_file = user_directory + "passphrase-microphone-results-1.wav"                                  #For testing purposes.
     # result, ltsds = ltsd_main_function(audio_file)
 
     # # debug
@@ -172,7 +172,7 @@ def create_account():
 
     print("[ * ] Building Gaussian Mixture Model ...")
 
-    gmm = GaussianMixture(n_components = 16, 
+    gmm = GaussianMixture(n_components = 16,
                 max_iter = 200,
                 covariance_type ='diag',
                 n_init = 3)
@@ -186,7 +186,7 @@ def create_account():
     pickle.dump(gmm, open("Models/" + str(username) + ".gmm", "wb"), protocol=None)
     print("[ * ] Object has been successfully written to Models/" + username + ".gmm ...")
     print("\n\n[ * ] User has been successfully enrolled ...")
-        
+
     features = numpy.asarray(())
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
@@ -203,7 +203,7 @@ def account_login():
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                      Prompting for Username                                                         #
     # ------------------------------------------------------------------------------------------------------------------------------------#
-    
+
     username = input("[ * ] Please enter your username : ")
 
     directory = os.fsencode(user_directory)
@@ -215,7 +215,7 @@ def account_login():
             break
         else:
             pass
-    
+
     if user_exist:
         print("[ * ] The user profile exists ...")
     else:
@@ -228,10 +228,10 @@ def account_login():
 
     print("\n[ * ] Generating random passphrase ...")
 
-    speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase. 
+    speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase.
     # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
-    speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening. 
-    
+    speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening.
+
     print("\n[ Authentication Passphrase ]")
     audio = generate_words()
 
@@ -244,14 +244,14 @@ def account_login():
 
     # (rate, signal) = scipy.io.wavfile.read(audio.get_wav_data())
     (rate, signal) = scipy.io.wavfile.read(user_directory + "passphrase-authentication-results.wav")
-    
+
     extracted_features = extract_features(rate, signal)
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                          Loading the Gaussian Models                                                #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-    gmm_models = [os.path.join(user_directory, user) 
+    gmm_models = [os.path.join(user_directory, user)
                     for user in os.listdir(user_directory)
                      if user.endswith('.gmm')]
 
@@ -260,7 +260,7 @@ def account_login():
     #Load the Gaussian user Models
     models = [pickle.load(open(user,'rb')) for user in gmm_models]
 
-    user_list = [user.split("/")[-1].split(".gmm")[0] 
+    user_list = [user.split("/")[-1].split(".gmm")[0]
                     for user in gmm_models]
 
     log_likelihood = numpy.zeros(len(models))
@@ -275,7 +275,7 @@ def account_login():
     identified_user = numpy.argmax(log_likelihood)
 
     print("[ * ] Identified User : " + str(identified_user) + " - " + user_list[identified_user])
-    
+
     if user_list[identified_user] == username:
         print("[ * ] You have been authenticated!")
     else:
@@ -283,6 +283,10 @@ def account_login():
 
 def generate_words():
     # obtain audio from the microphone
+
+    speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase.
+    # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
+    speech_recognition.Recognizer().dynamic_energy_threshold = True
 
     with speech_recognition.Microphone() as source:
 
@@ -307,9 +311,9 @@ def generate_words():
         random_words = RandomWords().random_words(count=5)
         print("\n")
         print(random_words)
-        
-        audio = speech_recognition.Recognizer().listen(source, timeout = 10)            
-        
+
+        audio = speech_recognition.Recognizer().listen(source, timeout = 10)
+
         # print("Type : " + str(type(audio))) test
 
     # recognize speech using IBM Speech to Text
@@ -339,7 +343,7 @@ def generate_words():
     #     print("Google Speech Recognition thinks you said : " + recognised_words_google)
     #     print("Google Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words_google)))
     #     print("Google Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words_google)))
-        
+
     # except speech_recognition.UnknownValueError:
     #     print("Google Speech Recognition could not understand audio")
     #     print("\nPlease try again ...")
@@ -351,7 +355,7 @@ def generate_words():
 
     # # recognize speech using Microsoft Bing Voice Recognition
     # BING_KEY = "6198a48cf6db495198f0123f3ecb8754"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
-    
+
     # try:
     #     recognised_words_microsoft = speech_recognition.Recognizer().recognize_bing(audio, key=BING_KEY)
     #     recognised_words = recognised_words_microsoft
@@ -370,13 +374,13 @@ def generate_words():
         generate_words()
     else:
         pass
-    
+
     return audio
 
 def calculate_delta(array):
-    """Calculate and returns the delta of given feature vector matrix 
+    """Calculate and returns the delta of given feature vector matrix
     (https://appliedmachinelearning.blog/2017/11/14/spoken-speaker-identification-based-on-gaussian-mixture-models-python-implementation/)"""
- 
+
     rows,cols = array.shape
     deltas = numpy.zeros((rows,20))
     N = 2
@@ -398,7 +402,7 @@ def calculate_delta(array):
     return deltas
 
 def extract_features(rate, signal):
-    
+
     mfcc_feat = mfcc(signal,
                      rate,
                      winlen=0.020,               #remove if not requred
@@ -424,7 +428,7 @@ def extract_features(rate, signal):
     # ax.plot(combined_features)
     # plt.show()
 
-            
+
 if __name__ == "__main__":
     """ This is executed when run from the command line """
     main()
