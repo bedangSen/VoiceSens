@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>VoiceSens Web Applicaiton</title>
+    <link rel="stylesheet" type="text/css" href="../static/stylesheets/semantic.min.css" />
+    <link rel="stylesheet" type="text/css" href="../static/stylesheets/example.css" />
+    <script src="../static/javascript/blah.js"></script>
+  </head>
+
+  <body class="exampleBody">
+    <div id="mainColumn" class="ui middle aligned center aligned grid">
+      <div id="mainForm" class="ui large form">
+        <h2 class="ui center aligned icon header loginText">
+          <img src="../images/makefg.png" class="ui circular icon loginLogo">
+          VoiceSens Sample Web Application
+        </h2>
+
+        <div id="formOverlay">
+          <form>
+            <div class="ui segment">
+              <div class="field" id="emailField">
+                <div class="ui left icon input">
+                  <i class="user icon"></i>
+                  <input type="text" name="email" placeholder="Enter your Username">
+                </div>
+              </div>
+              <div class="field" id="passwordField">
+                <div class="ui left icon input">
+                  <i class="lock icon"></i>
+                  <input type="password" name="password" placeholder="Enter your Password" autocomplete="none">
+                </div>
+              </div>
+              <div class="field" id="repasswordField">
+                <div class="ui left icon input">
+                  <i class="lock icon"></i>
+                  <input type="repassword" name="repassword" placeholder="Re-enter your Password" autocomplete="none">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div id="loadingContainer">
+          <div class="ui active massive loader" id="loading"></div>
+        </div>
+
+        <!-- <div id="loginBtn" class="ui fluid large button viBtnStyle viBtnColor">
+          Enroll New User
+        </div> -->
+
+        <!-- <button class="fluid ui button viBtnStyle viBtnColor">Fits container</button> -->
+
+        <div class="fluid ui animated button viBtnStyle viBtnColor" tabindex="0">
+          <div class="visible content">Next</div>
+          <div class="hidden content">
+            <!-- <img src="../images/arrow-pointing-to-right.png" class="ui center aligned"> -->
+            Record your Voice Samples
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="ui inverted vertical footer segment form-page">
+      <div class="ui center aligned container">
+        - VoiceSens by Bedang Sen -
+      </div>
+    </div>
+  </body>
+</html>
