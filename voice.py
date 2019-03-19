@@ -23,9 +23,13 @@ from sklearn.mixture import \
 
 import config  # This is the file where the credentials are stored
 
-# from flask import Flask, jsonify
+from flask import Flask, render_template, request, jsonify
 
-# app = Flask(__name__)
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('main.html')
 
 # import sys
 # import matplotlib.pyplot as plt
@@ -429,6 +433,14 @@ def extract_features(rate, signal):
     # plt.show()
 
 
-if __name__ == "__main__":
-    """ This is executed when run from the command line """
-    main()
+# if __name__ == "__main__":
+#     """ This is executed when run from the command line """
+#     main()
+
+## Main ##
+
+
+if __name__ == '__main__':
+
+    port = int(os.getenv('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)

@@ -11,6 +11,15 @@ body,.exampleBody {
   margin: 0px !important;
 }
 
+#mainForm {
+  /* Make more responsive */
+  width: 40vw;
+  /* height: 95vh; */
+  align-items: center;
+  /* padding: 0px !important; */
+  /* margin: 0px !important; */
+}
+
 .loginText,.loginText:hover{
   color: #000000;
   font-size: 36px !important;
