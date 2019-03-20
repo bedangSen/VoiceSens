@@ -107,6 +107,7 @@ def create_account():
     #                                                                   MFCC                                                              #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
+    # NOTE: This is going to be for the object storage burcket of the user.
     directory = os.fsencode(user_directory)
     features = numpy.asarray(())
 
@@ -182,10 +183,12 @@ def create_account():
                 n_init = 3)
 
     gmm.fit(features)
+
     print("[ * ] Modeling completed for user :" + username + " with data point = " + str(features.shape))
 
     # dumping the trained gaussian model
     # picklefile = path.split("-")[0]+".gmm"
+    # NOTE: This is where we send back a message to the front end indicating that the model is generated. The model should be saved to another bucket. 
     print("[ * ] Saving model object ...")
     pickle.dump(gmm, open("Models/" + str(username) + ".gmm", "wb"), protocol=None)
     print("[ * ] Object has been successfully written to Models/" + username + ".gmm ...")
@@ -308,13 +311,22 @@ def generate_words():
         #     limit=5)
 
         print("[ * ] Scanning environmental sound. Please remain silent ...")
+
+        # NOTE: Change the the source to the audio file that comes from the front end.
         speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration = 5)      #Adjusts the energy threshold dynamically using audio from source (an AudioSource instance) to account for ambient noise.
+
         print("[ * ] Scanning complete ...")
         print("[ * ] Recite the passphrase to train the voice model ...")
 
-        random_words = RandomWords().random_words(count=5)
+        # NOTE: This is what I need to send back to the front end
+        random_words = RandomWords().random_words(count=5)              .
         print("\n")
         print(random_words)
+
+        # NOTE: This is where we will change the function a little bit to accept wav files instead of the microphone input.
+        # harvard = sr.AudioFile('harvard.wav')
+        # >>> with harvard as source:
+        # ...    audio = r.record(source)
 
         audio = speech_recognition.Recognizer().listen(source, timeout = 10)
 
@@ -328,6 +340,7 @@ def generate_words():
         print("IBM Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words_ibm)))
         print("IBM Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words_ibm)))
 
+    # NOTE: If any of these happen return an error.
     except speech_recognition.UnknownValueError:
         print("IBM Speech to Text could not understand audio")
         print("\nPlease try again ...")
@@ -373,12 +386,14 @@ def generate_words():
     #     print("\nPlease try again ...")
     #     audio = generate_words()
 
+
     if fuzz.ratio(random_words, recognised_words) < 65:
         print("\nThe words you have spoken aren't entirely correct. Please try again ...")
         generate_words()
     else:
         pass
 
+    # NOTE: If there are no errors return a success message to the front end, and send the audio file to the bucket.
     return audio
 
 def calculate_delta(array):

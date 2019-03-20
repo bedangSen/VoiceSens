@@ -1,3 +1,10 @@
+hideElement('#environmentMessage');
+hideElement('#passphraseMessage');
+hideElement('#acceptMessage');
+hideElement('#rejectMessage');
+
+document.querySelector('#stopRecButton').classList.add('disabled');
+
 var wavesurfer = WaveSurfer.create({
   container     : '#waveform',
   waveColor     : '#01BAB6',
@@ -55,17 +62,17 @@ soundFile = new p5.SoundFile();
 
 // One-liner to resume playback when user interacted with the page.
 document.querySelector('#startRecButton').addEventListener('click', function() {
+  showElement('#environmentMessage');
+  document.querySelector('#startRecButton').classList.add('disabled');
+  document.querySelector('#stopRecButton').classList.remove('disabled');
   startRecording();
 });
 
 document.querySelector('#stopRecButton').addEventListener('click', function() {
+  document.querySelector('#startRecButton').classList.remove('disabled');
+  document.querySelector('#stopRecButton').classList.add('disabled');
   stopRecording();
 });
-
-// document.querySelector('#waveform').addEventListener("load", startRecording);
-// window.addEventListener('DOMContentLoaded', startRecording());
-
-
 
 function startRecording() {
   if (mic.enabled) {
@@ -87,4 +94,12 @@ function stopRecording() {
 
   console.log("Saving the audio file now...");
   p5.prototype.saveSound(soundFile, 'mySound.wav'); // save file
+}
+
+function hideElement(elSelector){
+  document.querySelector(elSelector).style.display = 'none';
+}
+
+function showElement(elSelector){
+  document.querySelector(elSelector).style.display = '';
 }
