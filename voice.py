@@ -62,7 +62,22 @@ def enroll():
 
 @app.route('/auth')
 def auth():
-    return render_template('auth.html')
+    if request.method == 'POST':
+    
+        data = request.get_json()
+
+        username = data['username']
+        password = data['password']
+
+        print(data)   
+
+        if True:
+            return redirect(url_for('voice'))
+            # return render_template('voice.html')
+        else:
+            return abort(401)
+    else:
+        return render_template('auth.html')
 
 @app.route('/voice')
 def voice():

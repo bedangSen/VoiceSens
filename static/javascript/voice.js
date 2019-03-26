@@ -46,19 +46,46 @@ wavesurfer.microphone.start();
 //wavesurfer.microphone.destroy();
 
 // create an audio in
-mic = new p5.AudioIn();
+// mic = new p5.AudioIn();
 
-// users must manually enable their browser microphone for recording to work properly!
-mic.start();
+// // users must manually enable their browser microphone for recording to work properly!
+// mic.start();
 
-// create a sound recorder
-recorder = new p5.SoundRecorder();
+// // create a sound recorder
+// recorder = new p5.SoundRecorder();
 
-// connect the mic to the recorder
-recorder.setInput(mic);
+// // connect the mic to the recorder
+// recorder.setInput(mic);
 
-// create an empty sound file that we will use to playback the recording
-soundFile = new p5.SoundFile();
+// // create an empty sound file that we will use to playback the recording
+// soundFile = new p5.SoundFile();
+
+var player = document.getElementById('player');
+
+  var handleSuccess = function(stream) {
+    // if (window.URL) {
+    //   player.srcObject = stream;
+    // } else {
+    //   player.src = stream;
+    // }
+
+    var context = new AudioContext();
+    var source = context.createMediaStreamSource(stream);
+    var processor = context.createScriptProcessor(1024, 1, 1);
+
+    source.connect(processor);
+    processor.connect(context.destination);
+
+    processor.onaudioprocess = function(e) {
+      // Do something with the data, i.e Convert this to WAV
+      console.log(e.inputBuffer);
+    };
+
+  };
+
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+      .then(handleSuccess);
+
 
 // One-liner to resume playback when user interacted with the page.
 document.querySelector('#startRecButton').addEventListener('click', function() {
