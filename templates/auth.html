@@ -12,7 +12,7 @@
     <div id="mainColumn" class="ui middle aligned center aligned grid">
       <div id="mainForm" class="ui large form">
         <h2 class="ui center aligned icon header loginText">
-          <img src="../images/makefg.png" class="ui circular icon loginLogo">
+          <img src="{{ url_for('static', filename='images/makefg.png')}}" class="ui circular icon loginLogo">
           VoiceSens Sample Web Application
         </h2>
 
@@ -68,7 +68,6 @@
         <div id="nextButton" class="fluid ui animated button viBtnStyle viBtnColor" tabindex="0">
           <div class="visible content">Next</div>
           <div class="hidden content">
-            <!-- <img src="../images/arrow-pointing-to-right.png" class="ui center aligned"> -->
             Verify who your are with your voice
           </div>
         </div>

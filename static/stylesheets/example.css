@@ -1,4 +1,5 @@
 body,.exampleBody {
+  /* background-color: #2B2B2B; */
   background-color: #ECF0F1;
 }
 
@@ -19,6 +20,14 @@ body,.exampleBody {
   /* padding: 0px !important; */
   /* margin: 0px !important; */
 }
+
+#waveform {
+  background-color: #2B2B2B;
+}
+
+/* .secondColor {
+  background-color: #2B2B2B;
+} */
 
 .loginText,.loginText:hover{
   color: #000000;

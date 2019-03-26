@@ -3,39 +3,70 @@
 This is a demo for a voice biometrics application
 """
 
-import pickle  # This is used to dump the models into an object
+# ------------------------------------------------------------------------------------------------------------------------------------#
+#                                                  Installing Packages Needed                                                         #
+# ------------------------------------------------------------------------------------------------------------------------------------#
+
+
+import pickle                                           # This is used to dump the models into an object
 import datetime
-import os  # For creating directories
-import shutil  # For deleting directories
-from collections import defaultdict
+import os                                               # For creating directories
+import shutil                                           # For deleting directories
+# from collections import defaultdict
 
 import matplotlib.pyplot as plt
 import numpy
 import scipy.cluster
 import scipy.io.wavfile
-import speech_recognition  # For the speech detection alogrithms
-from fuzzywuzzy import fuzz  # For the fuzzy matching algorithms
-from python_speech_features import mfcc  # For using the MFCC feature selection
-from random_words import RandomWords  # For generating random words
+import speech_recognition                               # For the speech detection alogrithms
+from fuzzywuzzy import fuzz                             # For the fuzzy matching algorithms
+from python_speech_features import mfcc                 # For using the MFCC feature selection
+from random_words import RandomWords                    # For generating random words
 from sklearn import preprocessing
-from sklearn.mixture import \
-    GaussianMixture  # For using the Gausian Mixture Models
+from sklearn.mixture import GaussianMixture             # For using the Gausian Mixture Models
 
-import config  # This is the file where the credentials are stored
+# Note: Is there a better way to do this?
+import config                                           # This is the file where the credentials are stored
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for, redirect, abort
+
+PORT = 8080
+HOST = '0.0.0.0'                                        #  Set to ‘0.0.0.0’ to have server available externally
 
 app = Flask(__name__)
 
 @app.route('/')
+@app.route('/main')
 def home():
     return render_template('main.html')
 
-# import sys
-# import matplotlib.pyplot as plt
-# import numpy as np
-# from pyssp.util import get_frame, read_signal
-# from six.moves import xrange
+@app.route('/enroll', methods=["GET", "POST"])
+def enroll():
+    if request.method == 'POST':
+    
+        data = request.get_json()
+
+        username = data['username']
+        password = data['password']
+        repassword = data['repassword']
+
+        print(data)   
+
+        if True:
+            return redirect(url_for('voice'))
+            # return render_template('voice.html')
+        else:
+            return abort(401)
+    else:
+        return render_template('enroll.html')
+
+@app.route('/auth')
+def auth():
+    return render_template('auth.html')
+
+@app.route('/voice')
+def voice():
+    return render_template('voice.html')
 
 #Defualt values used for testing.
 user_directory = 'Testing/test/'
@@ -69,6 +100,8 @@ def create_account():
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                      Prompting for Username                                                         #
     # ------------------------------------------------------------------------------------------------------------------------------------#
+
+    # do something with object storage here. 
 
     username = input("[ * ] Please enter your username : ")
 
@@ -107,7 +140,6 @@ def create_account():
     #                                                                   MFCC                                                              #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
-    # NOTE: This is going to be for the object storage burcket of the user.
     directory = os.fsencode(user_directory)
     features = numpy.asarray(())
 
@@ -183,12 +215,10 @@ def create_account():
                 n_init = 3)
 
     gmm.fit(features)
-
     print("[ * ] Modeling completed for user :" + username + " with data point = " + str(features.shape))
 
     # dumping the trained gaussian model
     # picklefile = path.split("-")[0]+".gmm"
-    # NOTE: This is where we send back a message to the front end indicating that the model is generated. The model should be saved to another bucket. 
     print("[ * ] Saving model object ...")
     pickle.dump(gmm, open("Models/" + str(username) + ".gmm", "wb"), protocol=None)
     print("[ * ] Object has been successfully written to Models/" + username + ".gmm ...")
@@ -311,22 +341,14 @@ def generate_words():
         #     limit=5)
 
         print("[ * ] Scanning environmental sound. Please remain silent ...")
-
-        # NOTE: Change the the source to the audio file that comes from the front end.
         speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration = 5)      #Adjusts the energy threshold dynamically using audio from source (an AudioSource instance) to account for ambient noise.
-
         print("[ * ] Scanning complete ...")
         print("[ * ] Recite the passphrase to train the voice model ...")
 
-        # NOTE: This is what I need to send back to the front end
-        random_words = RandomWords().random_words(count=5)              .
+        random_words = RandomWords().random_words(count=5)
+
         print("\n")
         print(random_words)
-
-        # NOTE: This is where we will change the function a little bit to accept wav files instead of the microphone input.
-        # harvard = sr.AudioFile('harvard.wav')
-        # >>> with harvard as source:
-        # ...    audio = r.record(source)
 
         audio = speech_recognition.Recognizer().listen(source, timeout = 10)
 
@@ -340,7 +362,6 @@ def generate_words():
         print("IBM Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words_ibm)))
         print("IBM Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words_ibm)))
 
-    # NOTE: If any of these happen return an error.
     except speech_recognition.UnknownValueError:
         print("IBM Speech to Text could not understand audio")
         print("\nPlease try again ...")
@@ -386,14 +407,12 @@ def generate_words():
     #     print("\nPlease try again ...")
     #     audio = generate_words()
 
-
     if fuzz.ratio(random_words, recognised_words) < 65:
         print("\nThe words you have spoken aren't entirely correct. Please try again ...")
         generate_words()
     else:
         pass
 
-    # NOTE: If there are no errors return a success message to the front end, and send the audio file to the bucket.
     return audio
 
 def calculate_delta(array):
@@ -456,6 +475,4 @@ def extract_features(rate, signal):
 
 
 if __name__ == '__main__':
-
-    port = int(os.getenv('PORT', 8080))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host=HOST, port=PORT, debug=True)
