@@ -8,27 +8,25 @@ hideElement('#rejectMessage');
 document.querySelector('#stopRecButton').classList.add('disabled');
 
 var wavesurfer = WaveSurfer.create({
-  container     : '#waveform',
-  waveColor     : '#01BAB6',
-  interact      : false,
-  cursorWidth   : 0,
-  barGap        : 2,
-  barHeight     : 2,
-  barWidth      : 0,
-  fillParent    : true,
-  forceDecode   : true,
+  container: '#waveform',
+  waveColor: '#01BAB6',
+  interact: false,
+  cursorWidth: 0,
+  barGap: 2,
+  barHeight: 2,
+  barWidth: 0,
+  fillParent: true,
+  forceDecode: true,
   plugins: [
     WaveSurfer.microphone.create()
   ]
 });
 
-// Test test
-
-wavesurfer.microphone.on('deviceReady', function(stream) {
-    console.log('Device ready!', stream);
+wavesurfer.microphone.on('deviceReady', function (stream) {
+  console.log('Device ready!', stream);
 });
-wavesurfer.microphone.on('deviceError', function(code) {
-    console.warn('Device error: ' + code);
+wavesurfer.microphone.on('deviceError', function (code) {
+  console.warn('Device error: ' + code);
 });
 
 // start the microphone
@@ -66,33 +64,33 @@ soundFile = new p5.SoundFile();
 
 
 // One-liner to resume playback when user interacted with the page.
-document.querySelector('#startRecButton').addEventListener('click', function() {
+document.querySelector('#startRecButton').addEventListener('click', function () {
   showElement('#environmentMessage');
   document.querySelector('#startRecButton').classList.add('disabled');
   document.querySelector('#stopRecButton').classList.remove('disabled');
-  
+
   startRecording();
 });
 
-document.querySelector('#stopRecButton').addEventListener('click', function() {
+document.querySelector('#stopRecButton').addEventListener('click', function () {
   document.querySelector('#startRecButton').classList.remove('disabled');
   document.querySelector('#stopRecButton').classList.add('disabled');
 
   hideElement("#environmentMessage");
   showElement("#vadMessage");
   // showElement('#progress');
-  
-  stopRecording();  
+
+  stopRecording();
 });
 
 function startRecording() {
   if (mic.enabled) {
-      console.log("You have started recording...");
-      // // start the microphone
-      // wavesurfer.microphone.start();
-      // Tell recorder to record to a p5.SoundFile which we will use for playback
-      recorder.record(soundFile);
-    }
+    console.log("You have started recording...");
+    // // start the microphone
+    // wavesurfer.microphone.start();
+    // Tell recorder to record to a p5.SoundFile which we will use for playback
+    recorder.record(soundFile, 30);
+  }
 }
 
 function stopRecording() {
@@ -102,40 +100,37 @@ function stopRecording() {
 
   console.log("Playing the audioifle now...");
   soundFile.play();
-  
+
   var date = new Date();
   var time = date.getTime();
 
   var file_name = time + '.wav';
 
-  console.log("Saving the audio file now...");
-  p5.prototype.saveSound(soundFile, file_name); // save file
+  // console.log("Saving the audio file now...");
+  // p5.prototype.saveSound(soundFile, file_name); // save file
 
+  console.log("Saving the SoundFile to a blob file ...");
+  var soundBlob = soundFile.getBlob();
+
+  // Now we can send the blob to a server...
   var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/voice', true);
-
-  // xhr.onload = function(e) {};
-  // // Listen to the upload progress.
-  // // assuming you have a progress element on your dom
-  // var progressBar = document.querySelector('progress');
-
-  // progressBar.value = 0;
-
-  // xhr.upload.onprogress = function(e) {
-  //   if (e.lengthComputable) {
-  //     progressBar.value = (e.loaded / e.total) * 100;
-  //     progressBar.textContent = progressBar.value; // Fallback for unsupported browsers.
+  // xhr.onload = function (e) {
+  //   if (this.readyState === 4) {
+  //     console.log("Server returned: ", e.target.responseText);
   //   }
   // };
- 
-  xhr.send("C:\\Users\\BedangSen\\Downloads\\" + file_name);
-  // hideElement("#progress");
+  // var fd = new FormData();
+  // fd.append("audio_data", soundBlob, "filename");
+  xhr.open("POST", "/voice", true);
+  xhr.send(soundBlob);
+
+  console.log("Your http message has been sent.");
 }
 
-function hideElement(elSelector){
+function hideElement(elSelector) {
   document.querySelector(elSelector).style.display = 'none';
 }
 
-function showElement(elSelector){
+function showElement(elSelector) {
   document.querySelector(elSelector).style.display = '';
 }
