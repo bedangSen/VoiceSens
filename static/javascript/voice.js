@@ -20,6 +20,8 @@ var wavesurfer = WaveSurfer.create({
   ]
 });
 
+// Test test
+
 wavesurfer.microphone.on('deviceReady', function(stream) {
     console.log('Device ready!', stream);
 });
