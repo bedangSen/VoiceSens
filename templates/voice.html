@@ -1,104 +1,116 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>VoiceSens Web Applicaiton</title>
-    <link rel="stylesheet" type="text/css" href="../static/stylesheets/semantic.min.css" />
-    <link rel="stylesheet" type="text/css" href="../static/stylesheets/example.css" />
 
-  </head>
+<head>
+  <meta charset="utf-8">
+  <title>VoiceSens Web Applicaiton</title>
+  <link rel="stylesheet" type="text/css" href="../static/stylesheets/semantic.min.css" />
+  <link rel="stylesheet" type="text/css" href="../static/stylesheets/example.css" />
 
-  <body class="exampleBody">
-    <div id="mainColumn" class="ui middle aligned center aligned grid">
-      <div id="mainForm" class="ui large form">
-        <h2 class="ui center aligned icon header loginText">
-          <img src="{{ url_for('static', filename='images/makefg.png')}}" class="ui circular icon loginLogo">
-          VoiceSens Sample Web Application
-        </h2>
+</head>
 
-        <div class="ui segment secondColor">
+<body class="exampleBody">
+  <div id="mainColumn" class="ui middle aligned center aligned grid">
+    <div id="mainForm" class="ui large form">
+      <h2 class="ui center aligned icon header loginText">
+        <img src="{{ url_for('static', filename='images/makefg.png')}}" class="ui circular icon loginLogo">
+        VoiceSens Sample Web Application
+      </h2>
 
-           <div id="enrollmentMessage" class="ui message">
-            <div class="ui center aligned header">
-              User Voice Print Enrollment
-            </div>
+      <div class="ui segment secondColor">
+
+        <div id="enrollmentMessage" class="ui message">
+          <div class="ui center aligned header">
+            User Voice Print Enrollment
           </div>
+        </div>
 
-          <div id="waveform"></div>
+        <div id="waveform"></div>
 
-          <button id="startRecButton" class="fluid ui button">
-            <i class="play icon"></i>
-            Start Recording
-          </button>
-          <button id="stopRecButton" class="fluid ui button">
-            <i class="pause icon"></i>
-            Stop Recording
-          </button>
-
-           <div id="environmentMessage" class="ui red icon message">
-            <i class="notched circle loading icon"></i>
-            <div class="content">
-              <div class="header">
-                Scanning for Environmental Sound
-              </div>
-              <p id="recordBody">Please remain silent for 5 seconds.</p>
-            </div>
+        <!-- <div id="progress" class="ui progress">
+          <div class="bar">
+            <div class="progress"></div>
           </div>
+          <div class="label">Uploading Files</div>
+        </div> -->
 
-          <div id="passphraseMessage" class="ui yellow icon message">
-           <i class="notched circle loading icon"></i>
-           <div class="content">
-             <div class="header">
-               Please recite the following words.
-             </div>
-             <p id="randomPassphrase"> {{ passphrase }} </p>
-           </div>
-         </div>
+        <button id="startRecButton" class="fluid ui button">
+          <i class="microphone icon"></i>
+          Start Recording
+        </button>
+        <button id="stopRecButton" class="fluid ui button">
+          <i class="microphone slash icon"></i>
+          Stop Recording
+        </button>
 
-         <div id="acceptMessage" class="ui green icon message">
+        <div id="environmentMessage" class="ui red icon message">
           <i class="notched circle loading icon"></i>
           <div class="content">
-            <div id="recordTitle" class="header">
-              Success
+            <div class="header">
+              Scanning for Environmental Sound
             </div>
-            <p>Your voice enrollment was successful.</p>
+            <p id="recordBody">Please remain silent for 5 seconds </p>
           </div>
         </div>
 
-        <div id="rejectMessage" class="ui red icon message">
-         <i class="notched circle loading icon"></i>
-         <div class="content">
-           <div id="recordTitle" class="header">
-             Fail
-           </div>
-           <p id="recordBody">Your voice enrollment was not succesful. Please try again. </p>
-         </div>
-       </div>
+        <div id="vadMessage" class="ui yellow icon message">
+          <i class="notched circle loading icon"></i>
+          <div class="content">
+            <div class="header">
+              Analyzing audio
+            </div>
+            <p id="recordBody">Creating noise baseline for Voice Activity Detection </p>
+          </div>
+        </div>
 
+        <div id="passphraseMessage" class="ui blue icon message">
+          <i class="notched circle loading icon"></i>
+          <div class="content">
+            <div class="header">
+              Please recite the following words
+            </div>
+            <p id="randomPassphrase"> {{ passphrase }} </p>
+          </div>
+        </div>
 
+        <div id="acceptMessage" class="ui positive message">
+          <i class="close icon"></i>
+          <div class="header">
+            Success
+          </div>
+          <p>Your voice enrollment was successful</p>
+        </div>
 
-       <input type="file" accept="audio/*" capture id="recorder">
-       <audio id="player" controls></audio>
-
-
-
+        <div id="rejectMessage" class="ui negative message">
+          <i class="close icon"></i>
+          <div class="header">
+            Your voice enrollment was not succesful.
+          </div>
+          <p>This could be because of the following reasons:
+            <ul class="list">
+              <li>The words you have spoken aren't entirely correct</li>
+              <li>IBM Speech to Text could not understand the audio.</li>
+              <li>Could not request results from IBM Speech to Text service.</li>
+            </ul>
+          </p>
         </div>
 
       </div>
+
     </div>
+  </div>
 
-    <div class="ui inverted vertical footer segment form-page">
-      <div class="ui center aligned container">
-        - VoiceSens by Bedang Sen -
-      </div>
+  <div class="ui inverted vertical footer segment form-page">
+    <div class="ui center aligned container">
+      - VoiceSens by Bedang Sen -
     </div>
-  </body>
+  </div>
+</body>
 
 
-  <script src="https://unpkg.com/wavesurfer.js"></script>
-  <script src="../static/javascript/p5.min.js"></script>
-  <script src="../static/javascript/p5.sound.min.js"></script>
-  <script src="../static/javascript/wavesurfer.microphone.min.js"></script>
-  <script src="../static/javascript/voice.js"></script>
-
+<script src="https://unpkg.com/wavesurfer.js"></script>
+<script src="../static/javascript/p5.min.js"></script>
+<script src="../static/javascript/p5.sound.min.js"></script>
+<script src="../static/javascript/wavesurfer.microphone.min.js"></script>
+<script src="../static/javascript/voice.js"></script>
 </html>

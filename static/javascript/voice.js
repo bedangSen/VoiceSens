@@ -1,4 +1,6 @@
+// hideElement('#progress');
 hideElement('#environmentMessage');
+hideElement('#vadMessage');
 hideElement('#passphraseMessage');
 hideElement('#acceptMessage');
 hideElement('#rejectMessage');
@@ -48,45 +50,19 @@ wavesurfer.microphone.start();
 //wavesurfer.microphone.destroy();
 
 // create an audio in
-// mic = new p5.AudioIn();
+mic = new p5.AudioIn();
 
-// // users must manually enable their browser microphone for recording to work properly!
-// mic.start();
+// users must manually enable their browser microphone for recording to work properly!
+mic.start();
 
-// // create a sound recorder
-// recorder = new p5.SoundRecorder();
+// create a sound recorder
+recorder = new p5.SoundRecorder();
 
-// // connect the mic to the recorder
-// recorder.setInput(mic);
+// connect the mic to the recorder
+recorder.setInput(mic);
 
-// // create an empty sound file that we will use to playback the recording
-// soundFile = new p5.SoundFile();
-
-var player = document.getElementById('player');
-
-  var handleSuccess = function(stream) {
-    // if (window.URL) {
-    //   player.srcObject = stream;
-    // } else {
-    //   player.src = stream;
-    // }
-
-    var context = new AudioContext();
-    var source = context.createMediaStreamSource(stream);
-    var processor = context.createScriptProcessor(1024, 1, 1);
-
-    source.connect(processor);
-    processor.connect(context.destination);
-
-    processor.onaudioprocess = function(e) {
-      // Do something with the data, i.e Convert this to WAV
-      console.log(e.inputBuffer);
-    };
-
-  };
-
-  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-      .then(handleSuccess);
+// create an empty sound file that we will use to playback the recording
+soundFile = new p5.SoundFile();
 
 
 // One-liner to resume playback when user interacted with the page.
@@ -94,13 +70,19 @@ document.querySelector('#startRecButton').addEventListener('click', function() {
   showElement('#environmentMessage');
   document.querySelector('#startRecButton').classList.add('disabled');
   document.querySelector('#stopRecButton').classList.remove('disabled');
+  
   startRecording();
 });
 
 document.querySelector('#stopRecButton').addEventListener('click', function() {
   document.querySelector('#startRecButton').classList.remove('disabled');
   document.querySelector('#stopRecButton').classList.add('disabled');
-  stopRecording();
+
+  hideElement("#environmentMessage");
+  showElement("#vadMessage");
+  // showElement('#progress');
+  
+  stopRecording();  
 });
 
 function startRecording() {
@@ -120,9 +102,34 @@ function stopRecording() {
 
   console.log("Playing the audioifle now...");
   soundFile.play();
+  
+  var date = new Date();
+  var time = date.getTime();
+
+  var file_name = time + '.wav';
 
   console.log("Saving the audio file now...");
-  p5.prototype.saveSound(soundFile, 'mySound.wav'); // save file
+  p5.prototype.saveSound(soundFile, file_name); // save file
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/voice', true);
+
+  // xhr.onload = function(e) {};
+  // // Listen to the upload progress.
+  // // assuming you have a progress element on your dom
+  // var progressBar = document.querySelector('progress');
+
+  // progressBar.value = 0;
+
+  // xhr.upload.onprogress = function(e) {
+  //   if (e.lengthComputable) {
+  //     progressBar.value = (e.loaded / e.total) * 100;
+  //     progressBar.textContent = progressBar.value; // Fallback for unsupported browsers.
+  //   }
+  // };
+ 
+  xhr.send("C:\\Users\\BedangSen\\Downloads\\" + file_name);
+  // hideElement("#progress");
 }
 
 function hideElement(elSelector){

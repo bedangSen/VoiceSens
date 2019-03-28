@@ -60,7 +60,7 @@ def enroll():
     else:
         return render_template('enroll.html')
 
-@app.route('/auth')
+@app.route('/auth', methods=['POST', 'GET'])
 def auth():
     if request.method == 'POST':
     
@@ -79,9 +79,15 @@ def auth():
     else:
         return render_template('auth.html')
 
-@app.route('/voice')
+@app.route('/voice', methods=['GET', 'POST'])
 def voice():
-    return render_template('voice.html')
+    if request.method == 'POST':
+        f = open('static/audio/file.wav', 'wb')
+        f.write(request.data)
+        f.close()
+        return "Binary message written!"
+    else:
+        return render_template('voice.html')
 
 #Defualt values used for testing.
 user_directory = 'Testing/test/'
