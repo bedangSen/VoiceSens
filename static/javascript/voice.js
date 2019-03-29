@@ -4,8 +4,14 @@ hideElement('#vadMessage');
 hideElement('#passphraseMessage');
 hideElement('#acceptMessage');
 hideElement('#rejectMessage');
+hideElement('#authenticationComplete');
+hideElement('#authenticationInComplete');
+hideElement('#enrollmentComplete');
 
 document.querySelector('#stopRecButton').classList.add('disabled');
+
+var x = document.referrer;
+console.log("The refferer of this page is : ", x);
 
 var wavesurfer = WaveSurfer.create({
   container: '#waveform',
@@ -62,9 +68,17 @@ recorder.setInput(mic);
 // create an empty sound file that we will use to playback the recording
 soundFile = new p5.SoundFile();
 
-// number of attempts for enrollment.
-var number_of_attempts = 3;
-console.log("number of attempts : ", number_of_attempts);
+if (document.referrer == "http://localhost:8080/enroll") {
+  // number of attempts for enrollment.
+  var number_of_attempts = 3;
+  console.log("number of attempts : ", number_of_attempts);
+}
+else {
+  // number of attempts for enrollment.
+  var number_of_attempts = 1;
+  console.log("number of attempts : ", number_of_attempts);
+}
+
 
 // One-liner to resume playback when user interacted with the page.
 document.querySelector('#startRecButton').addEventListener('click', function () {
@@ -76,6 +90,7 @@ document.querySelector('#startRecButton').addEventListener('click', function () 
     console.log("You have started recording passphrase...");
     recorder.record(soundFile);
   } else {
+    document.querySelector('#passphraseMessage').classList.add('green');;
 
     console.log("You have started recording the background...");
     recorder.record(soundFile);
@@ -85,11 +100,13 @@ document.querySelector('#startRecButton').addEventListener('click', function () 
   document.querySelector('#stopRecButton').classList.remove('disabled');
 });
 
-document.querySelector('#stopRecButton').addEventListener('click', function () {
-  document.querySelector('#startRecButton').classList.remove('disabled');
-  document.querySelector('#stopRecButton').classList.add('disabled');
+document.querySelector('#stopRecButton').addEventListener('click', function () {  
 
   if (document.querySelector('#passphraseMessage').style.display == '') {
+    
+  document.querySelector('#stopRecButton').classList.add('disabled');
+  document.querySelector('#passphraseMessage').classList.remove('green');
+
     hideElement("#passphraseMessage");
     showElement("#vadMessage");
 
@@ -97,14 +114,14 @@ document.querySelector('#stopRecButton').addEventListener('click', function () {
   }
   // For the background sound
   else {
+    document.querySelector('#startRecButton').classList.remove('disabled');
+  document.querySelector('#stopRecButton').classList.add('disabled');
+
     hideElement("#environmentMessage");
     showElement("#vadMessage");
 
     stopBackgroundRecording();
   }
-
-
-
 
 });
 
@@ -126,7 +143,7 @@ function stopRecording() {
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-      console.log("xjr.resposne : ", xhr.response);
+      console.log("xhr.resposne : ", xhr.response);
 
       if (xhr.response == "fail") {
         hideElement('#vadMessage');
@@ -142,6 +159,7 @@ function stopRecording() {
       } else {
         showElement('#passphraseMessage');
         hideElement('#vadMessage');
+        
         document.getElementById('randomPassphrase').innerHTML = xhr.response;
       }
     }
@@ -188,30 +206,68 @@ function stopBackgroundRecording() {
 
 document.querySelector('#close_button_accept').addEventListener('click', function () {
   if (number_of_attempts < 0) {
-    hideElement('#acceptMessage');
-    showElement('#vadMessage');
-    hideElement('#passphraseMessage');
+    if (document.referrer == "http://localhost:8080/auth") {
+      hideElement('#acceptMessage');
+      showElement('#vadMessage');
+      hideElement('#passphraseMessage');
 
-    document.getElementById('recordBody').innerHTML = "Building Voice Print";
+      var analysis_text = 'Identifying user based on voice print';
+      document.getElementById('recordBody').innerHTML = analysis_text;
 
-    document.querySelector('#vadMessage').classList.add('green');
-    document.querySelector('#vadMessage').classList.remove('yellow');
+      document.querySelector('#vadMessage').classList.add('green');
+      document.querySelector('#vadMessage').classList.remove('yellow');
 
-    var xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest();
 
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-        // showElement('#passphraseMessage');
-        // hideElement('#vadMessage');
-        // document.getElementById('randomPassphrase').innerHTML = xhr.response;
-        console.log("xjr.resposne : ", xhr.response);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+          // showElement('#passphraseMessage');
+          // hideElement('#vadMessage');
+          // document.getElementById('randomPassphrase').innerHTML = xhr.response;
+          console.log("xjr.resposne : ", xhr.response);
+
+          if (xhr.response == "success") {
+            showElement('#authenticationComplete');
+          } else {
+            showElement('#authenticationIncomplete');
+          }
+        }
       }
-    }
 
-    xhr.open("GET", "/biometrics", true);
-    xhr.send();
+      xhr.open("GET", "/verify", true);
+      xhr.send();
+    }
+    else {
+      hideElement('#acceptMessage');
+      showElement('#vadMessage');
+      hideElement('#passphraseMessage');
+
+      var analysis_text = 'Building Voice Print';
+      document.getElementById('recordBody').innerHTML = analysis_text;
+
+      document.querySelector('#vadMessage').classList.add('green');
+      document.querySelector('#vadMessage').classList.remove('yellow');
+
+      var xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+          // showElement('#passphraseMessage');
+          // hideElement('#vadMessage');
+          // document.getElementById('randomPassphrase').innerHTML = xhr.response;
+          console.log("xjr.resposne : ", xhr.response);
+
+          showElement("#enrollmentComplete");
+        }
+      }
+
+      xhr.open("GET", "/biometrics", true);
+      xhr.send();
+    }
   }
   else {
+    document.querySelector('#startRecButton').classList.remove('disabled');
+
     hideElement('#acceptMessage');
     showElement('#vadMessage');
     hideElement('#passphraseMessage');
@@ -233,6 +289,8 @@ document.querySelector('#close_button_accept').addEventListener('click', functio
 });
 
 document.querySelector('#close_button_reject').addEventListener('click', function () {
+  document.querySelector('#startRecButton').classList.remove('disabled');
+
   showElement('#vadMessage');
   hideElement('#rejectMessage');
   hideElement('#passphraseMessage');

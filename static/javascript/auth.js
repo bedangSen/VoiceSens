@@ -1,6 +1,7 @@
 var usernamePointer = document.querySelector('#usernamePointer');
 var passwordPointer = document.querySelector('#passwordPointer');
 
+
 usernamePointer.style.display = 'none';
 passwordPointer.style.display = 'none';
 
@@ -22,27 +23,32 @@ window.onload = function (event) {
       password: pass
     };
 
-    var xhttp = new XMLHttpRequest();
-
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
       if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-        window.location.href = '/voice';
+        console.log("Response : ", xhr.response);
+        
+        if (xhr.response == "Doesn't exist") {
+          usernamePointer.style.display = '';
+        }
+        else{
+          window.location.href = '/voice';
+        }
       }
     }
 
-    xhr.open("GET", "/voice", true);
+    // xhr.open("GET", "/voice", true);
+    // xhr.setRequestHeader("Content-type", "application/json");
+
+    // xhr.send();
+
+    // console.log("The enroll button works!");
+
+    xhr.open("POST", "/auth", true);
     xhr.setRequestHeader("Content-type", "application/json");
 
-    xhr.send();
-
-    console.log("The enroll button works!");
-
-    xhttp.open("POST", "/auth", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-
-    xhttp.send(JSON.stringify(loginCreds));
+    xhr.send(JSON.stringify(loginCreds));
 
     console.log("Your http message has been sent.");
 
@@ -50,3 +56,11 @@ window.onload = function (event) {
   });
 
 };
+//
+// function hideElement(elSelector) {
+//   document.querySelector(elSelector).style.display = 'none';
+// }
+//
+// function showElement(elSelector) {
+//   document.querySelector(elSelector).style.display = '';
+// }

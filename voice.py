@@ -40,10 +40,13 @@ from flask import Flask, render_template, request, jsonify, url_for, redirect, a
 PORT = 8080
 HOST = '0.0.0.0'  # Set to ‘0.0.0.0’ to have server available externally
 
+# Global Variables
 random_words = []
 random_string = ""
 username = ""
-user_directory = "Users/PercyJackson"
+user_directory = "Users/Test"
+filename = ""
+filename_wav = ""
 
 app = Flask(__name__)
 
@@ -87,26 +90,51 @@ def enroll():
 
 @app.route('/auth', methods=['POST', 'GET'])
 def auth():
+    global username
+    global user_directory
+    global filename
+
+    user_exist = False
+
     if request.method == 'POST':
 
         data = request.get_json()
+        print(data)
 
+        user_directory = './Models'
         username = data['username']
         password = data['password']
 
-        print(data)
-        return redirect(url_for('voice'))
+        print("[ DEBUG ] : What is the user directory at auth : ", user_directory)
+        print("os.fsencode(user_directory : ", os.fsencode(user_directory))
+        directory = os.fsencode(user_directory)
+        print("directory : ", os.listdir(directory)[1:])
 
-        # if True:
-        #     return redirect(url_for('voice'))
-        # else:
-        #     return abort(401)
+        for file in os.listdir(directory):
+            print("file : ", file)
+            filename = os.fsdecode(file)
+            if filename.startswith(username):
+                print("filename : ", filename)
+                user_exist = True
+                break
+            else:
+                pass
+
+        if user_exist:
+            print("[ * ] The user profile exists ...")
+            return "User exist"
+
+        else:
+            print("[ * ] The user profile does not exists ...")
+            return "Doesn't exist"
+
     else:
+        print('its coming here')
         return render_template('auth.html')
 
 
 @app.route('/vad', methods=['GET', 'POST'])
-def VAD():
+def vad():
     if request.method == 'POST':
         global random_words
 
@@ -143,21 +171,21 @@ def VAD():
 @app.route('/voice', methods=['GET', 'POST'])
 def voice():
     global user_directory
+    global filename_wav
+
+    print("[ DEBUG ] : User directory at voice : ", user_directory)
 
     if request.method == 'POST':
         #    global random_string
         global random_words
         global username
 
-    #    print("random strings in voice : ", random_string)
-    #    print("randome workds in voice : ", random_words)
-
-        filename = user_directory + "-".join(random_words) + '.wav'
-        f = open(filename, 'wb')
+        filename_wav = user_directory + "/" + "-".join(random_words) + '.wav'
+        f = open(filename_wav, 'wb')
         f.write(request.data)
         f.close()
 
-        speech = speech_recognition.AudioFile(filename)
+        speech = speech_recognition.AudioFile(filename_wav)
         with speech as source:
             audio = speech_recognition.Recognizer().record(source)
 
@@ -176,14 +204,14 @@ def voice():
         except speech_recognition.UnknownValueError:
             print("IBM Speech to Text could not understand audio")
             print("\nPlease try again ...")
-            os.remove(filename)
+            os.remove(filename_wav)
             return "fail"
 
         except speech_recognition.RequestError as e:
             print(
                 "Could not request results from IBM Speech to Text service; {0}".format(e))
             print("\nPlease try again ...")
-            os.remove(filename)
+            os.remove(filename_wav)
             return "fail"
 
         # # recognize speech using Google Speech Recognition
@@ -226,7 +254,7 @@ def voice():
         if fuzz.ratio(random_words, recognised_words) < 65:
             print(
                 "\nThe words you have spoken aren't entirely correct. Please try again ...")
-            os.remove(filename)
+            os.remove(filename_wav)
             return "fail"
         else:
             pass
@@ -237,111 +265,77 @@ def voice():
         return render_template('voice.html')
 
 
-app.route('/biometrics', methods=['GET'])
-
-
+@app.route('/biometrics', methods=['GET', 'POST'])
 def biometrics():
-    
-    # MFCC
-    
-    directory = os.fsencode(user_directory)
-    features = numpy.asarray(())
 
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(".wav"):
-
-            (rate, signal) = scipy.io.wavfile.read(user_directory + filename)
-
-            extracted_features = extract_features(rate, signal)
-
-            if features.size == 0:
-                features = extracted_features
-            else:
-                features = numpy.vstack((features, extracted_features))
-
-        else:
-            continue
-
-    # GaussianMixture Model
-
-    print("[ * ] Building Gaussian Mixture Model ...")
-
-    gmm = GaussianMixture(n_components=16,
-                          max_iter=200,
-                          covariance_type='diag',
-                          n_init=3)
-
-    gmm.fit(features)
-    print("[ * ] Modeling completed for user :" + username +
-          " with data point = " + str(features.shape))
-
-    # dumping the trained gaussian model
-    # picklefile = path.split("-")[0]+".gmm"
-    print("[ * ] Saving model object ...")
-    pickle.dump(gmm, open("Models/" + str(username) +
-                          ".gmm", "wb"), protocol=None)
-    print("[ * ] Object has been successfully written to Models/" +
-          username + ".gmm ...")
-    print("\n\n[ * ] User has been successfully enrolled ...")
-
-    features = numpy.asarray(())
-
-
-def account_login():
-    print("Test you have entered login menu")
-
-    user_directory = "Models/"
-    username = "test"  # Test only!
-    user_exist = False
-
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-    #                                                      Prompting for Username                                                         #
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-
-    username = input("[ * ] Please enter your username : ")
-
-    directory = os.fsencode(user_directory)
-
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.startswith(username):
-            user_exist = True
-            break
-        else:
-            pass
-
-    if user_exist:
-        print("[ * ] The user profile exists ...")
+    if request.method == 'POST':
+        pass
     else:
-        print("[ * ] The user profile does not exists ...")
-        return
+        # MFCC
+        print("Into the biometrics route.")
 
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-    #                                                  Generating random passphrases for Authentication                                   #
-    # ------------------------------------------------------------------------------------------------------------------------------------#
+        directory = os.fsencode(user_directory)
+        features = numpy.asarray(())
 
-    print("\n[ * ] Generating random passphrase ...")
+        for file in os.listdir(directory):
+            filename_wav = os.fsdecode(file)
+            if filename_wav.endswith(".wav"):
+                print("[biometrics] : Reading audio files for processing ...")
+                (rate, signal) = scipy.io.wavfile.read(filename_wav)
 
-    # Represents the minimum length of silence (in seconds) that will register as the end of a phrase.
-    speech_recognition.Recognizer().pause_threshold = 5.5
-    # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
-    # Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening.
-    speech_recognition.Recognizer().dynamic_energy_threshold = True
+                extracted_features = extract_features(rate, signal)
 
-    print("\n[ Authentication Passphrase ]")
-    audio = generate_words()
+                if features.size == 0:
+                    features = extracted_features
+                else:
+                    features = numpy.vstack((features, extracted_features))
 
-    with open(user_directory + "passphrase-authentication-results.wav", "wb") as f:
-        f.write(audio.get_wav_data())
+            else:
+                continue
+
+        # GaussianMixture Model
+        print("[ * ] Building Gaussian Mixture Model ...")
+
+        gmm = GaussianMixture(n_components=16,
+                            max_iter=200,
+                            covariance_type='diag',
+                            n_init=3)
+
+        gmm.fit(features)
+        print("[ * ] Modeling completed for user :" + username +
+            " with data point = " + str(features.shape))
+
+        # dumping the trained gaussian model
+        # picklefile = path.split("-")[0]+".gmm"
+        print("[ * ] Saving model object ...")
+        pickle.dump(gmm, open("Models/" + str(username) +
+                            ".gmm", "wb"), protocol=None)
+        print("[ * ] Object has been successfully written to Models/" +
+            username + ".gmm ...")
+        print("\n\n[ * ] User has been successfully enrolled ...")
+
+        features = numpy.asarray(())
+
+        return "User has been successfully enrolled ...!!"
+
+
+@app.route("/verify", methods=['GET'])
+def verify():
+    global username
+    global filename
+    global user_directory
+    global filename_wav
+
+    print("[ DEBUG ] : user directory : " , user_directory)
+    print("[ DEBUG ] : filename : " , filename)
+    print("[ DEBUG ] : filename_wav : " , filename_wav)
 
     # ------------------------------------------------------------------------------------------------------------------------------------#
     #                                                                   LTSD and MFCC                                                     #
     # ------------------------------------------------------------------------------------------------------------------------------------#
 
     # (rate, signal) = scipy.io.wavfile.read(audio.get_wav_data())
-    (rate, signal) = scipy.io.wavfile.read(
-        user_directory + "passphrase-authentication-results.wav")
+    (rate, signal) = scipy.io.wavfile.read(filename_wav)
 
     extracted_features = extract_features(rate, signal)
 
@@ -375,119 +369,23 @@ def account_login():
     print("[ * ] Identified User : " + str(identified_user) +
           " - " + user_list[identified_user])
 
+    auth_message = ""
+
     if user_list[identified_user] == username:
         print("[ * ] You have been authenticated!")
+        auth_message = "success"
     else:
         print("[ * ] Sorry you have not been authenticated")
+        auth_message = "fail"
 
-
-def generate_words():
-    # obtain audio from the microphone
-
-    # Represents the minimum length of silence (in seconds) that will register as the end of a phrase.
-    speech_recognition.Recognizer().pause_threshold = 5.5
-    # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
-    speech_recognition.Recognizer().dynamic_energy_threshold = True
-
-    with speech_recognition.Microphone() as source:
-
-        # random_words = RandomWords().get_random_words(
-        #     hasDictionaryDef="true",
-        #     includePartOfSpeech="noun,verb",
-        #     # minCorpusCount=80,
-        #     # maxCorpusCount=100,
-        #     minDictionaryCount=25,
-        #     maxDictionaryCount=35,
-        #     minLength=3,
-        #     maxLength=10,
-        #     # sortBy="count",
-        #     # sortOrder="asc",
-        #     limit=5)
-
-        print("[ * ] Scanning environmental sound. Please remain silent ...")
-        # Adjusts the energy threshold dynamically using audio from source (an AudioSource instance) to account for ambient noise.
-        speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration=5)
-        print("[ * ] Scanning complete ...")
-        print("[ * ] Recite the passphrase to train the voice model ...")
-
-        random_words = RandomWords().random_words(count=5)
-
-        print("\n")
-        print(random_words)
-
-        audio = speech_recognition.Recognizer().listen(source, timeout=10)
-
-        # print("Type : " + str(type(audio))) test
-
-    # recognize speech using IBM Speech to Text
-    try:
-        recognised_words_ibm = speech_recognition.Recognizer().recognize_ibm(
-            audio, username=config.IBM_USERNAME, password=config.IBM_PASSWORD)
-        recognised_words = recognised_words_ibm
-        print("IBM Speech to Text thinks you said : " + recognised_words_ibm)
-        print("IBM Fuzzy partial score : " +
-              str(fuzz.partial_ratio(random_words, recognised_words_ibm)))
-        print("IBM Fuzzy score : " +
-              str(fuzz.ratio(random_words, recognised_words_ibm)))
-
-    except speech_recognition.UnknownValueError:
-        print("IBM Speech to Text could not understand audio")
-        print("\nPlease try again ...")
-        audio = generate_words()
-    except speech_recognition.RequestError as e:
-        print(
-            "Could not request results from IBM Speech to Text service; {0}".format(e))
-        print("\nPlease try again ...")
-        audio = generate_words()
-
-    # # recognize speech using Google Speech Recognition
-    # try:
-    #     # for testing purposes, we're just using the default API key
-    #     # to use another API key, use `speech_recognition.Recognizer().recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-    #     # instead of `speech_recognition.Recognizer().recognize_google(audio)`
-    #     recognised_words_google = speech_recognition.Recognizer().recognize_google(audio)
-    #     recognised_words = recognised_words_google
-    #     print("Google Speech Recognition thinks you said : " + recognised_words_google)
-    #     print("Google Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words_google)))
-    #     print("Google Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words_google)))
-
-    # except speech_recognition.UnknownValueError:
-    #     print("Google Speech Recognition could not understand audio")
-    #     print("\nPlease try again ...")
-    #     audio = generate_words()
-    # except speech_recognition.RequestError as e:
-    #     print("Could not request results from Google Speech Recognition service; {0}".format(e))
-    #     print("\nPlease try again ...")
-    #     audio = generate_words()
-
-    # # recognize speech using Microsoft Bing Voice Recognition
-    # BING_KEY = "6198a48cf6db495198f0123f3ecb8754"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
-
-    # try:
-    #     recognised_words_microsoft = speech_recognition.Recognizer().recognize_bing(audio, key=BING_KEY)
-    #     recognised_words = recognised_words_microsoft
-    #     print("Microsoft Bing Voice Recognition thinks you said : " + recognised_words_microsoft)
-    # except speech_recognition.UnknownValueError:
-    #     print("Microsoft Bing Voice Recognition could not understand audio")
-    #     print("\nPlease try again ...")
-    #     audio = generate_words()
-    # except speech_recognition.RequestError as e:
-    #     print("Could not request results from Microsoft Bing Voice Recognition service; {0}".format(e))
-    #     print("\nPlease try again ...")
-    #     audio = generate_words()
-
-    if fuzz.ratio(random_words, recognised_words) < 65:
-        print("\nThe words you have spoken aren't entirely correct. Please try again ...")
-        generate_words()
-    else:
-        pass
-
-    return audio
+    return auth_message
 
 
 def calculate_delta(array):
     """Calculate and returns the delta of given feature vector matrix
     (https://appliedmachinelearning.blog/2017/11/14/spoken-speaker-identification-based-on-gaussian-mixture-models-python-implementation/)"""
+
+    print("[Delta] : Calculating delta")
 
     rows, cols = array.shape
     deltas = numpy.zeros((rows, 20))
@@ -512,6 +410,7 @@ def calculate_delta(array):
 
 
 def extract_features(rate, signal):
+    print("[extract_features] : Exctracting featureses ...")
 
     mfcc_feat = mfcc(signal,
                      rate,
@@ -532,18 +431,6 @@ def extract_features(rate, signal):
     combined_features = numpy.hstack((mfcc_feat, delta_feat))
 
     return combined_features
-
-    # fig = plt.figure()
-    # ax = fig.add_subplot(111)
-    # ax.plot(combined_features)
-    # plt.show()
-
-
-# if __name__ == "__main__":
-#     """ This is executed when run from the command line """
-#     main()
-
-## Main ##
 
 
 if __name__ == '__main__':
