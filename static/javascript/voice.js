@@ -100,10 +100,10 @@ document.querySelector('#startRecButton').addEventListener('click', function () 
   document.querySelector('#stopRecButton').classList.remove('disabled');
 });
 
-document.querySelector('#stopRecButton').addEventListener('click', function () {  
+document.querySelector('#stopRecButton').addEventListener('click', function () {
 
   if (document.querySelector('#passphraseMessage').style.display == '') {
-    
+
   document.querySelector('#stopRecButton').classList.add('disabled');
   document.querySelector('#passphraseMessage').classList.remove('green');
 
@@ -159,7 +159,7 @@ function stopRecording() {
       } else {
         showElement('#passphraseMessage');
         hideElement('#vadMessage');
-        
+
         document.getElementById('randomPassphrase').innerHTML = xhr.response;
       }
     }
@@ -253,7 +253,7 @@ document.querySelector('#close_button_accept').addEventListener('click', functio
       xhr.onreadystatechange = function () {
         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
           // showElement('#passphraseMessage');
-          // hideElement('#vadMessage');
+          hideElement('#vadMessage');
           // document.getElementById('randomPassphrase').innerHTML = xhr.response;
           console.log("xjr.resposne : ", xhr.response);
 

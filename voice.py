@@ -101,7 +101,7 @@ def auth():
         data = request.get_json()
         print(data)
 
-        user_directory = './Models'
+        user_directory = 'Models/'
         username = data['username']
         password = data['password']
 
@@ -180,7 +180,7 @@ def voice():
         global random_words
         global username
 
-        filename_wav = user_directory + "/" + "-".join(random_words) + '.wav'
+        filename_wav = user_directory + "-".join(random_words) + '.wav'
         f = open(filename_wav, 'wb')
         f.write(request.data)
         f.close()
@@ -267,6 +267,8 @@ def voice():
 
 @app.route('/biometrics', methods=['GET', 'POST'])
 def biometrics():
+    global user_directory
+    print("[ DEBUG ] : User directory is : ", user_directory)
 
     if request.method == 'POST':
         pass
@@ -281,7 +283,7 @@ def biometrics():
             filename_wav = os.fsdecode(file)
             if filename_wav.endswith(".wav"):
                 print("[biometrics] : Reading audio files for processing ...")
-                (rate, signal) = scipy.io.wavfile.read(filename_wav)
+                (rate, signal) = scipy.io.wavfile.read(user_directory + filename_wav)
 
                 extracted_features = extract_features(rate, signal)
 
