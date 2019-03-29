@@ -21,3 +21,5 @@ Feeback
 # Ignore the Flask Virtual environement
 flask-env/
 flask-env-p3/
+test_env
+Users

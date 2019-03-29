@@ -62,49 +62,75 @@ recorder.setInput(mic);
 // create an empty sound file that we will use to playback the recording
 soundFile = new p5.SoundFile();
 
+// number of attempts for enrollment.
+var number_of_attempts = 3; 
 
 // One-liner to resume playback when user interacted with the page.
 document.querySelector('#startRecButton').addEventListener('click', function () {
-  showElement('#environmentMessage');
+
+  console.log("number of attempts : ", number_of_attempts);
+  
+
+  // if (number_of_attempts <= 0 ) {
+  //   //Or something like this. 
+  //   document.querySelector('#startRecButton').classList.add('disabled');
+  // }
+
+  // For the background sound
+  if (document.querySelector('#passphraseMessage').style.display == 'none') {
+    showElement('#environmentMessage');
+
+    console.log("You have started recording passphrase...");
+    recorder.record(soundFile);
+  } else {
+
+    console.log("You have started recording the background...");
+    recorder.record(soundFile);
+  }
+  
   document.querySelector('#startRecButton').classList.add('disabled');
   document.querySelector('#stopRecButton').classList.remove('disabled');
 
-  startRecording();
+  // startRecording();
 });
 
 document.querySelector('#stopRecButton').addEventListener('click', function () {
   document.querySelector('#startRecButton').classList.remove('disabled');
-  document.querySelector('#stopRecButton').classList.add('disabled');
+  document.querySelector('#stopRecButton').classList.add('disabled');  
+ 
+  if (document.querySelector('#passphraseMessage').style.display == '') {
+    hideElement("#passphraseMessage");
+    showElement("#vadMessage");
 
-  hideElement("#environmentMessage");
-  showElement("#vadMessage");
-  // showElement('#progress');
+    stopRecording();
+  }
+  // For the background sound
+  else{
+    hideElement("#environmentMessage");
+    showElement("#vadMessage");
 
-  stopRecording();
+    stopBackgroundRecording();
+  }
+
+  
+
+  
 });
 
 function startRecording() {
   if (mic.enabled) {
     console.log("You have started recording...");
-    // // start the microphone
-    // wavesurfer.microphone.start();
-    // Tell recorder to record to a p5.SoundFile which we will use for playback
     recorder.record(soundFile, 30);
+    
   }
 }
 
 function stopRecording() {
   console.log("You have stopped recording...");
-  // wavesurfer.microphone.pause();
   recorder.stop(); // stop recorder, and send the result to soundFile
 
-  console.log("Playing the audioifle now...");
-  soundFile.play();
-
-  var date = new Date();
-  var time = date.getTime();
-
-  var file_name = time + '.wav';
+  // console.log("Playing the audioifle now...");
+  // soundFile.play();
 
   // console.log("Saving the audio file now...");
   // p5.prototype.saveSound(soundFile, file_name); // save file
@@ -114,15 +140,49 @@ function stopRecording() {
 
   // Now we can send the blob to a server...
   var xhr = new XMLHttpRequest();
-  // xhr.onload = function (e) {
-  //   if (this.readyState === 4) {
-  //     console.log("Server returned: ", e.target.responseText);
-  //   }
-  // };
-  // var fd = new FormData();
-  // fd.append("audio_data", soundBlob, "filename");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {     
+      showElement('#passphraseMessage');
+      hideElement('#vadMessage');
+      document.getElementById('randomPassphrase').innerHTML = xhr.response;
+      console.log(xhr.response);      
+    }
+  }
+
   xhr.open("POST", "/voice", true);
-  xhr.send(soundBlob);
+  xhr.send(soundBlob);  
+
+  console.log("Your http message has been sent.");
+}
+
+function stopBackgroundRecording() {
+  console.log("You have stopped recording...");
+  recorder.stop(); // stop recorder, and send the result to soundFile
+
+  // console.log("Playing the audioifle now...");
+  // soundFile.play();
+
+  // console.log("Saving the audio file now...");
+  // p5.prototype.saveSound(soundFile, file_name); // save file
+
+  console.log("Saving the SoundFile to a blob file ...");
+  var soundBlob = soundFile.getBlob();
+
+  // Now we can send the blob to a server...
+  var xhr = new XMLHttpRequest();
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {     
+      showElement('#passphraseMessage');
+      hideElement('#vadMessage');
+      document.getElementById('randomPassphrase').innerHTML = xhr.response;
+      console.log(xhr.response);      
+    }
+  }
+
+  xhr.open("POST", "/vad", true);
+  xhr.send(soundBlob);  
 
   console.log("Your http message has been sent.");
 }
