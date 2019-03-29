@@ -96,7 +96,6 @@ window.onload = function (event) {
       xhr.send(JSON.stringify(loginCreds));
 
       console.log("Your http message has been sent.");
-
     }
     else {
       console.log("Invalid credentials have been entered ...\nPlease try again ...");

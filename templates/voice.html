@@ -59,12 +59,22 @@
             <div class="header">
               Analyzing audio
             </div>
-            <!-- <p id="recordBody">Creating noise baseline for Voice Activity Detection </p> -->
+            <p id="recordBody"> </p>
           </div>
         </div>
 
-        <div id="passphraseMessage" class="ui blue icon message">
+        <!-- <div id="passphraseMessage" class="ui blue icon message">
           <i class="notched circle loading icon"></i>
+          <div class="content">
+            <div class="header">
+              Please recite the following words
+            </div>
+            <p id="randomPassphrase"> {{ passphrase }} </p>
+          </div>
+        </div> -->
+
+        <div id="passphraseMessage" class="ui icon message">
+          <i class="shield alternate icon"></i>
           <div class="content">
             <div class="header">
               Please recite the following words
@@ -74,7 +84,7 @@
         </div>
 
         <div id="acceptMessage" class="ui positive message">
-          <i class="close icon"></i>
+          <i id="close_button_accept" class="close icon"></i>
           <div class="header">
             Success
           </div>
@@ -82,7 +92,7 @@
         </div>
 
         <div id="rejectMessage" class="ui negative message">
-          <i class="close icon"></i>
+          <i id="close_button_reject" class="close icon"></i>
           <div class="header">
             Your voice enrollment was not succesful.
           </div>

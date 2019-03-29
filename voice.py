@@ -43,7 +43,7 @@ HOST = '0.0.0.0'  # Set to ‘0.0.0.0’ to have server available externally
 random_words = []
 random_string = ""
 username = ""
-user_directory = ""
+user_directory = "Users/PercyJackson"
 
 app = Flask(__name__)
 
@@ -52,7 +52,6 @@ app = Flask(__name__)
 @app.route('/home')
 def home():
     return render_template('main.html')
-    # return redirect(url_for('enroll'))
 
 
 @app.route('/enroll', methods=["GET", "POST"])
@@ -115,7 +114,8 @@ def VAD():
         f.write(request.data)
         f.close()
 
-        background_noise = speech_recognition.AudioFile('./static/audio/background_noise.wav')
+        background_noise = speech_recognition.AudioFile(
+            './static/audio/background_noise.wav')
         with background_noise as source:
             speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration=5)
 
@@ -124,14 +124,20 @@ def VAD():
         random_words = RandomWords().random_words(count=5)
         print(random_words)
 
-        # random_string = "  ".join(random_words)
-        # print("Random strings in vad : " , random_string)
-        # print("Random words in vad : ", random_words)
-
         return "  ".join(random_words)
 
     else:
-        pass
+        background_noise = speech_recognition.AudioFile(
+            './static/audio/background_noise.wav')
+        with background_noise as source:
+            speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration=5)
+
+        print("Voice activity detection complete ...")
+
+        random_words = RandomWords().random_words(count=5)
+        print(random_words)
+
+        return "  ".join(random_words)
 
 
 @app.route('/voice', methods=['GET', 'POST'])
@@ -160,21 +166,24 @@ def voice():
             recognised_words_ibm = speech_recognition.Recognizer().recognize_ibm(
                 audio, username=config.IBM_USERNAME, password=config.IBM_PASSWORD)
             recognised_words = recognised_words_ibm
+
             print("IBM Speech to Text thinks you said : " + recognised_words_ibm)
             print("IBM Fuzzy partial score : " +
-                str(fuzz.partial_ratio(random_words, recognised_words_ibm)))
+                  str(fuzz.partial_ratio(random_words, recognised_words_ibm)))
             print("IBM Fuzzy score : " +
-                str(fuzz.ratio(random_words, recognised_words_ibm)))
+                  str(fuzz.ratio(random_words, recognised_words_ibm)))
 
         except speech_recognition.UnknownValueError:
             print("IBM Speech to Text could not understand audio")
             print("\nPlease try again ...")
-            
+            os.remove(filename)
             return "fail"
+
         except speech_recognition.RequestError as e:
-            print("Could not request results from IBM Speech to Text service; {0}".format(e))
-            print("\nPlease try again ...")            
-            
+            print(
+                "Could not request results from IBM Speech to Text service; {0}".format(e))
+            print("\nPlease try again ...")
+            os.remove(filename)
             return "fail"
 
         # # recognize speech using Google Speech Recognition
@@ -192,7 +201,7 @@ def voice():
         #     print("Google Speech Recognition could not understand audio")
         #     print("\nPlease try again ...")
         #     return "fail"
-        
+
         # except speech_recognition.RequestError as e:
         #     print("Could not request results from Google Speech Recognition service; {0}".format(e))
         #     print("\nPlease try again ...")
@@ -215,7 +224,9 @@ def voice():
         #     return "fail"
 
         if fuzz.ratio(random_words, recognised_words) < 65:
-            print("\nThe words you have spoken aren't entirely correct. Please try again ...")
+            print(
+                "\nThe words you have spoken aren't entirely correct. Please try again ...")
+            os.remove(filename)
             return "fail"
         else:
             pass
@@ -226,58 +237,13 @@ def voice():
         return render_template('voice.html')
 
 
+app.route('/biometrics', methods=['GET'])
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def create_account():
-    """ The Create Account Module : Allows user to create a user profile to store the voice """
-
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-    #                                                      Prompting for Username                                                         #
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-
-    # do something with object storage here.
-
+def biometrics():
     
-
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-    #                                                      Generating random passphrases for enrollment                                   #
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-
-    print("\n[ * ] Generating random passphrase ...")
-
-    # Represents the number of voice samples that the application is going to collect.
-    number_of_samples = 3
-    # speech_recognition.Recognizer().pause_threshold = 5.5                               #Represents the minimum length of silence (in seconds) that will register as the end of a phrase.
-    # # speech_recognition.Recognizer().energy_threshold = 500                            #Represents the energy level threshold for sounds. Values below this threshold are considered silence, and values above this threshold are considered speech
-    # speech_recognition.Recognizer().dynamic_energy_threshold = True                     #Represents whether the energy level threshold (see recognizer_instance.energy_threshold) for sounds should be automatically adjusted based on the currently ambient noise level while listening.
-
-    for count in range(number_of_samples):
-        print("\nPassphrase [ " + str(count + 1) + " ]")
-        audio = generate_words()
-
-        with open(user_directory + "passphrase-microphone-results-" + str(count + 1) + ".wav", "wb") as f:
-            f.write(audio.get_wav_data())
-
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-    #                                                                   MFCC                                                              #
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-
+    # MFCC
+    
     directory = os.fsencode(user_directory)
     features = numpy.asarray(())
 
@@ -286,13 +252,6 @@ def create_account():
         if filename.endswith(".wav"):
 
             (rate, signal) = scipy.io.wavfile.read(user_directory + filename)
-
-            # fig = plt.figure()
-            # ax = fig.add_subplot(111)
-            # ax.plot(signal)
-            # plt.show()
-
-            # print(str(signal))
 
             extracted_features = extract_features(rate, signal)
 
@@ -304,52 +263,14 @@ def create_account():
         else:
             continue
 
-    #-------------------------------------------------------------------------------------------------------------------------------------#
-    #----------------------------------------------------------     DUBUG : MFCC     -----------------------------------------------------#                                                     #
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-
-    # DEBUG
-    # print(features_dictionary)
-    with open(user_directory + "features-dictionary.txt", 'at') as feat:
-        feat.write(str(features))
-
-    # # debug
-    # audio_file = user_directory + "passphrase-microphone-results-1.wav"                                  #For testing purposes.
-    # result, ltsds = ltsd_main_function(audio_file)
-
-    # # debug
-    # with open(user_directory + "passphrase-microphone-results-after_ltsd.txt", "wt") as f:
-    #     f.write(str(ltsds))
-
-    # # (rate,signal) = scipy.io.wavfile.read(audio_file)
-
-    # debug
-    with open(user_directory + "passphrase-microphone-results-rate.txt", "wt") as f:
-        f.write(str(rate))
-
-    # debug
-    with open(user_directory + "passphrase-microphone-results-signal.txt", "wt") as f:
-        f.write(str(signal))
-
-    # print(signal.shape)
-    # print(rate)
-    # print(mfcc_feat.shape)
-
-    # debug
-    with open(user_directory + "passphrase-microphone-results-mfcc.txt", "w") as f:
-        f.write(str(extracted_features[0]))
-        f.write(str(extracted_features.shape))
-
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-    #                                                           Gaussian Mixture Model                                                    #
-    # ------------------------------------------------------------------------------------------------------------------------------------#
+    # GaussianMixture Model
 
     print("[ * ] Building Gaussian Mixture Model ...")
 
     gmm = GaussianMixture(n_components=16,
-                          max_iter= 200,
+                          max_iter=200,
                           covariance_type='diag',
-                          n_init= 3)
+                          n_init=3)
 
     gmm.fit(features)
     print("[ * ] Modeling completed for user :" + username +
@@ -365,10 +286,6 @@ def create_account():
     print("\n\n[ * ] User has been successfully enrolled ...")
 
     features = numpy.asarray(())
-
-    # ------------------------------------------------------------------------------------------------------------------------------------#
-    #                                                           End of User enrollment                                                    #
-    # ------------------------------------------------------------------------------------------------------------------------------------#
 
 
 def account_login():
@@ -488,7 +405,8 @@ def generate_words():
         #     limit=5)
 
         print("[ * ] Scanning environmental sound. Please remain silent ...")
-        speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration= 5)  # Adjusts the energy threshold dynamically using audio from source (an AudioSource instance) to account for ambient noise.
+        # Adjusts the energy threshold dynamically using audio from source (an AudioSource instance) to account for ambient noise.
+        speech_recognition.Recognizer().adjust_for_ambient_noise(source, duration=5)
         print("[ * ] Scanning complete ...")
         print("[ * ] Recite the passphrase to train the voice model ...")
 
@@ -588,7 +506,8 @@ def calculate_delta(array):
                 second = i+j
             index.append((second, first))
             j += 1
-        deltas[i] = (array[index[0][0]]-array[index[0][1]] + (2 * (array[index[1][0]]-array[index[1][1]]))) / 10
+        deltas[i] = (array[index[0][0]]-array[index[0][1]] +
+                     (2 * (array[index[1][0]]-array[index[1][1]]))) / 10
     return deltas
 
 

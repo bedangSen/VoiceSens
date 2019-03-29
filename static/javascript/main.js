@@ -1,7 +1,11 @@
-document.querySelector('#signupButton').addEventListener('click', function() {
-    console.log("The sign up button works!");
-  });
+document.querySelector('#enrollOptionButton').addEventListener('click', function () {
 
-  document.querySelector('#signinButton').addEventListener('click', function() {
-    console.log("The sign in button works!");
-  });
+  console.log("The enroll button works!");
+  window.location.href = '/enroll';
+});
+
+document.querySelector('#authOptionButton').addEventListener('click', function () {
+  
+  console.log("The auth button works!");
+  window.location.href = '/auth';
+});
