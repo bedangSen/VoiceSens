@@ -18,7 +18,7 @@ These instructions will get you a copy of the project up and running on your loc
 ## Configuring the application
 
 
-1. Open the sample_config.py file and change the username and password for the text to speech service. Then rename the file to config.py 
+1. Open the `sample_config.py` file and change the username and password for the text to speech service. Then rename the file to `config.py` 
 
 ```
 IBM_USERNAME = "USERNAME"  # IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -49,7 +49,7 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
    2. Create the virtual environment in Python 3.
    
    ```
-    virtualenv -p C:\Python37\python.exe test_env
+    virtualenv -p path\to\your\python.exe test_env
     ```    
    
    3. Activate the test environment.     
