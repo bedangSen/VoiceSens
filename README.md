@@ -2,6 +2,11 @@
 
 <b>VoiceSens</b> is a <i>text independent</i> voice biometric solution developed to combat some of the shortcomings of standard authentication techniques like passwords and pincodes, as well as current available voice biometric solutions. The solution is developed in Python and uses Watson Speech to Text (speech recognition).
 
+<p align="center">
+<img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(4).png?raw=true" width="500" alt="Wireshark Packet Analysis" align="middle">
+</p>
+      
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
