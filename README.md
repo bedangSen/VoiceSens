@@ -1,4 +1,4 @@
-# VoiceSens
+# VoiceSens - Adding Voice Biometrics to your Application
 
 <b>VoiceSens</b> is a <i>text independent</i> voice biometric solution developed to combat some of the shortcomings of standard authentication techniques like passwords and pincodes, as well as current available voice biometric solutions. The solution is developed in Python and uses Watson Speech to Text (speech recognition).
 
@@ -97,34 +97,34 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
 #### 1. VoiceSens Homepage
 
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton.png?raw=true" align="middle">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton.png?raw=true" align="middle" width="800">
 </p>
 
 #### 2. Enrollment Page
 
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(1).png?raw=true" align="middle">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(1).png?raw=true" align="middle" width="650">
 </p>
 
 #### 3. Authentication Page
 
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(2).png?raw=true" align="middle">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(2).png?raw=true" align="middle" width="650">
 </p>
 
 #### 4. Voice Biometrics Page
 
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(4).png?raw=true" align="middle">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(4).png?raw=true" align="middle" width="650">
 </p>
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(5).png?raw=true" align="middle">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(5).png?raw=true" align="middle" width="650">
 </p>
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(6).png?raw=true" align="middle">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(6).png?raw=true" align="middle" width="650">
 </p>
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(8).png?raw=true" align="middle">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(8).png?raw=true" align="middle" width="650">
 </p>
 
 
