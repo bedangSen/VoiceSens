@@ -1,0 +1,29 @@
+body {
+      background-color: #2b2b2b;
+    }
+    body > .grid {
+      height: 100%;
+    }
+    .image {
+      margin-top: -100px;
+    }
+    .column {
+      max-width: 450px;
+  }
+
+  h1 {
+    color: #2ebec1;
+  }
+
+  #mainColumn{
+    /* Make more responsive */
+    width: 100vw;
+    height: 95vh;
+    align-items: center;
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+
+  .button{
+    padding: 10px;
+  }

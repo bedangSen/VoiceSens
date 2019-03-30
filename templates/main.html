@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>VoiceSens Web Applicaiton</title>
+    <link rel="stylesheet" type="text/css" href="../static/stylesheets/semantic.min.css" />
+    <link rel="stylesheet" type="text/css" href="../static/stylesheets/example.css" />
+
+  </head>
+
+  <body class="exampleBody">
+    <div id="mainColumn" class="ui middle aligned center aligned grid">
+      <div id="mainForm" class="ui large form">
+        <h2 class="ui center aligned icon header loginText">
+          <img src="{{ url_for('static', filename='images/makefg.png')}}" class="ui circular icon loginLogo">
+          VoiceSens Sample Web Application
+        </h2>
+
+        <div id="enrollOptionButton" class="ui fluid center aligned large button viBtnStyle viBtnColor">
+          Enroll a New User
+        </div>
+
+        <div id="authOptionButton" class="ui fluid large button viBtnStyle viBtnColor">
+          Authentication an Existing User
+        </div>
+
+        <!-- <div id="signupButton" class="fluid ui animated button viBtnStyle viBtnColor" tabindex="0">
+          <div class="visible content">Sign Up</div>
+          <div class="hidden content">
+            <
+            Enroll a New User
+          </div>
+        </div>
+
+        <div id="signinButton" class="fluid ui animated button viBtnStyle viBtnColor" tabindex="0">
+          <div class="visible content">Sign In</div>
+          <div class="hidden content">
+            
+            Authenticate an Existing User
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+
+    <div class="ui inverted vertical footer segment form-page">
+      <div class="ui center aligned container">
+        - VoiceSens by Bedang Sen -
+      </div>
+    </div>
+  </body>
+
+  <script src="../static/javascript/main.js"></script>
+
+</html>

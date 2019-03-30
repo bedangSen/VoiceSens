@@ -1,5 +1,25 @@
+# Ignoring the Configuration files.
 config.py 
 config.pyc 
-Models\passphrase-authentication-results.wav 
+
+# Ignoring all the wav files.  
 "*.wav" 
 *.wav 
+
+# Ignore the .vscode folder. 
+.vscode/
+
+# Ignore the Testing folder.
+Testing/
+
+# Ignore the Testing folder.
+__pycache__/
+
+# Ignore the Feedbacak file.
+Feeback
+
+# Ignore the Flask Virtual environement
+flask-env/
+flask-env-p3/
+test_env
+Users

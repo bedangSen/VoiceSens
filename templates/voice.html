@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>VoiceSens Web Applicaiton</title>
+  <link rel="stylesheet" type="text/css" href="../static/stylesheets/semantic.min.css" />
+  <link rel="stylesheet" type="text/css" href="../static/stylesheets/example.css" />
+
+</head>
+
+<body class="exampleBody" data-url="{{ url_for('voice') }}">
+  <div id="mainColumn" class="ui middle aligned center aligned grid">
+    <div id="mainForm" class="ui large form">
+      <h2 class="ui center aligned icon header loginText">
+        <img src="{{ url_for('static', filename='images/makefg.png')}}" class="ui circular icon loginLogo">
+        VoiceSens Sample Web Application
+      </h2>
+
+      <div class="ui segment secondColor">
+
+        <div id="enrollmentMessage" class="ui message">
+          <div class="ui center aligned header">
+            User Voice Print Enrollment
+          </div>
+        </div>
+
+        <div id="waveform"></div>
+
+        <!-- <div id="progress" class="ui progress">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label">Uploading Files</div>
+        </div> -->
+
+        <button id="startRecButton" class="fluid ui button">
+          <i class="microphone icon"></i>
+          Start Recording
+        </button>
+        <button id="stopRecButton" class="fluid ui button">
+          <i class="microphone slash icon"></i>
+          Stop Recording
+        </button>
+
+        <div id="environmentMessage" class="ui red icon message">
+          <i class="notched circle loading icon"></i>
+          <div class="content">
+            <div class="header">
+              Scanning for Environmental Sound
+            </div>
+            <p id="recordBody">Please remain silent for 5 seconds </p>
+          </div>
+        </div>
+
+        <div id="vadMessage" class="ui yellow icon message">
+          <i class="notched circle loading icon"></i>
+          <div class="content">
+            <div class="header">
+              Analyzing audio
+            </div>
+            <p id="recordBody">Matching words to generated words</p>
+          </div>
+        </div>
+
+        <div id="passphraseMessage" class="ui icon message">
+          <i class="shield alternate icon"></i>
+          <div class="content">
+            <div class="header">
+              Please recite the following words
+            </div>
+            <p id="randomPassphrase"> {{ passphrase }} </p>
+          </div>
+        </div>
+
+        <div id="acceptMessage" class="ui positive message">
+          <i id="close_button_accept" class="close icon"></i>
+          <div class="header">
+            Success
+          </div>
+          <p>Your voice sample was successfully created.</p>
+        </div>
+
+        <div id="rejectMessage" class="ui negative message">
+          <i id="close_button_reject" class="close icon"></i>
+          <div class="header">
+            Your voice sample was not succesful.
+          </div>
+          <p>This could be because of the following reasons:
+            <ul class="list">
+              <li>The words you have spoken aren't entirely correct</li>
+              <li>IBM Speech to Text could not understand the audio.</li>
+              <li>Could not request results from IBM Speech to Text service.</li>
+            </ul>
+          </p>
+        </div>       
+
+      </div>
+      <div id="enrollmentComplete" class="ui bottom attached positive message">
+        <i class="icon succesful"></i>
+       Voice Print enrollment Successful! <a href="/auth">Authenticate yourself here</a>.
+      </div>
+
+      <div id="authenticationComplete" class="ui bottom attached positive message">
+        <i class="icon succesful"></i>
+       You have been successfully been Authenticated! <a href="/">Go back to the main page</a>.
+      </div>
+
+      <div id="authenticationInComplete" class="ui bottom attached negative message">
+        <i class="icon succesful"></i>
+       Sorry your voice print does not match! <a href="/">Go back to the main page</a>.
+      </div>
+
+    </div>
+  </div>
+
+  <div class="ui inverted vertical footer segment form-page">
+    <div class="ui center aligned container">
+      - VoiceSens by Bedang Sen -
+    </div>
+  </div>
+</body>
+
+<script src="https://unpkg.com/wavesurfer.js"></script>
+<script src="../static/javascript/p5.min.js"></script>
+<script src="../static/javascript/p5.sound.min.js"></script>
+<script src="../static/javascript/p5.dom.min.js"></script>
+<script src="../static/javascript/wavesurfer.microphone.min.js"></script>
+<script src="../static/javascript/voice.js"></script>
+</html>

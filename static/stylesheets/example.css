@@ -1,0 +1,123 @@
+body,.exampleBody {
+  /* background-color: #2B2B2B; */
+  background-color: #ECF0F1;
+}
+
+#mainColumn{
+  /* Make more responsive */
+  width: 100vw;
+  height: 95vh;
+  align-items: center;
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+#mainForm {
+  /* Make more responsive */
+  width: 40vw;
+  /* height: 95vh; */
+  align-items: center;
+  /* padding: 0px !important; */
+  /* margin: 0px !important; */
+}
+
+#waveform {
+  background-color: #2B2B2B;
+}
+
+/* .secondColor {
+  background-color: #2B2B2B;
+} */
+
+.loginText,.loginText:hover{
+  color: #000000;
+  font-size: 36px !important;
+}
+
+.unlockedText{
+  color: #000000;
+  font-size: 36px !important;
+  margin: auto;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.viBtnColor{
+  background-color: #01BAB6 !important;
+}
+
+.viBtnStyle {
+  width: 100%;
+  /* max-width: 440px; */
+  color: #FFFFFF !important;
+  margin-top: 20px !important;
+}
+
+
+#messageLabel,#messageLabel:hover{
+  cursor: none !important;
+  opacity: 0.0;
+}
+
+.loginLogo{
+  max-width: 100px;
+}
+
+#logoutBtn{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  max-width: 160px;
+}
+
+#formOverlay {
+  padding-bottom: 20px;
+}
+
+#livenessContainer{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.biometricOptionsContainer {
+  display: flex;
+}
+
+#biometricOptions {
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+#loadingContainer{
+  /* Hide to start */
+  display: none;
+  margin-top: 20px;
+}
+
+#biometricOptions{
+  display: none;
+}
+
+.enrollmentTooltip{
+  opacity: 0.0;
+}
+
+#enrollVoice {
+  display: inline-flex;
+  position: absolute;
+  left: 84%;
+}
+
+#enrollFace {
+  display: inline-flex;
+  position: absolute;
+  left: 84%;
+}
+
+#enrollVideo {
+  display: inline-flex;
+  position: absolute;
+  right: 92%;
+}
