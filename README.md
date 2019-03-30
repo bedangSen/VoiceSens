@@ -3,9 +3,19 @@
 <b>VoiceSens</b> is a <i>text independent</i> voice biometric solution developed to combat some of the shortcomings of standard authentication techniques like passwords and pincodes, as well as current available voice biometric solutions. The solution is developed in Python and uses Watson Speech to Text (speech recognition).
 
 <p align="center">
-<img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(4).png?raw=true" width="500" alt="Wireshark Packet Analysis" align="middle">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/test.png?raw=true" align="middle">
 </p>
-      
+
+## Table of Content
+
++ [Getting Started](#getting-started)
++ [Configuring the Application](#configuring-the-application) 
++ [Running VoiceSens locally](#running-locally)
++ [Demo Screenshots](#demo)
++ [Built with](#built-with)
++ [References (Further Reading)](#references)
++ [Future Additions](#to-do)
+
 
 ## Getting Started
 
@@ -74,23 +84,49 @@ IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanu
     ```
     pip install -r requirements.txt
     ```
-    
-1. Installing the PyAudio library.
-     
-    1. If you are using a Unix machine, install the library using the following command. 
-        ```
-        pip install PyAudio
-        ```       
-    1. If you are using a Windows machine, install the file manually by the following command. 
-        ```
-        pip install PyAudio-0.2.11-cp37-cp37m-win_amd64.whl
-        ```
+
     
 1. Run the application.
 
     ```
     python voice.py
     ```
+
+## Demo
+
+#### 1. VoiceSens Homepage
+
+<p align="center">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton.png?raw=true" align="middle">
+</p>
+
+#### 2. Enrollment Page
+
+<p align="center">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(1).png?raw=true" align="middle">
+</p>
+
+#### 3. Authentication Page
+
+<p align="center">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(2).png?raw=true" align="middle">
+</p>
+
+#### 4. Voice Biometrics Page
+
+<p align="center">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(4).png?raw=true" align="middle">
+</p>
+<p align="center">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(5).png?raw=true" align="middle">
+</p>
+<p align="center">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(6).png?raw=true" align="middle">
+</p>
+<p align="center">
+ <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(8).png?raw=true" align="middle">
+</p>
+
 
 ## Built With
 
