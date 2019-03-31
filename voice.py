@@ -31,14 +31,21 @@ from sklearn import preprocessing
 # For using the Gausian Mixture Models
 from sklearn.mixture import GaussianMixture
 
+from watson_developer_cloud import SpeechToTextV1
+
+
 # Note: Is there a better way to do this?
 # This is the file where the credentials are stored
 import config
 
-from flask import Flask, render_template, request, jsonify, url_for, redirect, abort, session
+speech_to_text = SpeechToTextV1(
+    iam_apikey=config.iam_apikey,
+    url=config.url
+)
+
+from flask import Flask, render_template, request, jsonify, url_for, redirect, abort, session, json
 
 PORT = 8080
-HOST = '0.0.0.0'  # Set to ‘0.0.0.0’ to have server available externally
 
 # Global Variables
 random_words = []
@@ -185,71 +192,15 @@ def voice():
         f.write(request.data)
         f.close()
 
-        speech = speech_recognition.AudioFile(filename_wav)
-        with speech as source:
-            audio = speech_recognition.Recognizer().record(source)
+        with open(filename_wav, 'rb') as audio_file:
+             recognised_words = speech_to_text.recognize(audio_file, content_type='audio/wav').get_result()
 
-        # recognize speech using IBM Speech to Text
-        try:
-            recognised_words_ibm = speech_recognition.Recognizer().recognize_ibm(
-                audio, username=config.IBM_USERNAME, password=config.IBM_PASSWORD)
-            recognised_words = recognised_words_ibm
+        recognised_words = str(recognised_words['results'][0]['alternatives'][0]['transcript'])
+        
 
-            print("IBM Speech to Text thinks you said : " + recognised_words_ibm)
-            print("IBM Fuzzy partial score : " +
-                  str(fuzz.partial_ratio(random_words, recognised_words_ibm)))
-            print("IBM Fuzzy score : " +
-                  str(fuzz.ratio(random_words, recognised_words_ibm)))
-
-        except speech_recognition.UnknownValueError:
-            print("IBM Speech to Text could not understand audio")
-            print("\nPlease try again ...")
-            os.remove(filename_wav)
-            return "fail"
-
-        except speech_recognition.RequestError as e:
-            print(
-                "Could not request results from IBM Speech to Text service; {0}".format(e))
-            print("\nPlease try again ...")
-            os.remove(filename_wav)
-            return "fail"
-
-        # # recognize speech using Google Speech Recognition
-        # try:
-        #     # for testing purposes, we're just using the default API key
-        #     # to use another API key, use `speech_recognition.Recognizer().recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-        #     # instead of `speech_recognition.Recognizer().recognize_google(audio)`
-        #     recognised_words_google = speech_recognition.Recognizer().recognize_google(audio)
-        #     recognised_words = recognised_words_google
-        #     print("Google Speech Recognition thinks you said : " + recognised_words_google)
-        #     print("Google Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words_google)))
-        #     print("Google Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words_google)))
-
-        # except speech_recognition.UnknownValueError:
-        #     print("Google Speech Recognition could not understand audio")
-        #     print("\nPlease try again ...")
-        #     return "fail"
-
-        # except speech_recognition.RequestError as e:
-        #     print("Could not request results from Google Speech Recognition service; {0}".format(e))
-        #     print("\nPlease try again ...")
-        #     return "fail"
-
-        # # recognize speech using Microsoft Bing Voice Recognition
-        # BING_KEY = "6198a48cf6db495198f0123f3ecb8754"  # Microsoft Bing Voice Recognition API keys 32-character lowercase hexadecimal strings
-
-        # try:
-        #     recognised_words_microsoft = speech_recognition.Recognizer().recognize_bing(audio, key=BING_KEY)
-        #     recognised_words = recognised_words_microsoft
-        #     print("Microsoft Bing Voice Recognition thinks you said : " + recognised_words_microsoft)
-        # except speech_recognition.UnknownValueError:
-        #     print("Microsoft Bing Voice Recognition could not understand audio")
-        #     print("\nPlease try again ...")
-        #     return "fail"
-        # except speech_recognition.RequestError as e:
-        #     print("Could not request results from Microsoft Bing Voice Recognition service; {0}".format(e))
-        #     print("\nPlease try again ...")
-        #     return "fail"
+        print("IBM Speech to Text thinks you said : " + recognised_words)
+        print("IBM Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words)))
+        print("IBM Fuzzy score : " + str(fuzz.ratio(random_words, recognised_words)))       
 
         if fuzz.ratio(random_words, recognised_words) < 65:
             print(
@@ -436,4 +387,4 @@ def extract_features(rate, signal):
 
 
 if __name__ == '__main__':
-    app.run(host=HOST, port=PORT, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True)
