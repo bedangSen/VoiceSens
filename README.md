@@ -3,7 +3,7 @@
 <b>VoiceSens</b> is a <i>text independent</i> voice biometric solution developed to combat some of the shortcomings of standard authentication techniques like passwords and pincodes, as well as current available voice biometric solutions. The solution is developed in Python and uses Watson Speech to Text (speech recognition).
 
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/test.png?raw=true" align="middle">
+ <img src="https://media.giphy.com/media/8Tzgv7v3KBg9SqM2Ci/giphy.gif" align="middle">
 </p>
 
 ## Table of Content
@@ -28,16 +28,16 @@ These instructions will get you a copy of the project up and running on your loc
     - Log in to your IBM Cloud account.
     - Click **Create**.
     - Click **Show** to view the service credentials.
-    - Copy the `username` and `password` values.
+    - Copy the `iam_apikey` and `url` values.
 
 ## Configuring the application
 
 
 1. Open the `sample_config.py` file and change the username and password for the text to speech service. Then rename the file to `config.py` 
 
-```
-IBM_USERNAME = "USERNAME"  # IBM Speech to Text usernames are strings of the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-IBM_PASSWORD = "PASSWORD"  # IBM Speech to Text passwords are mixed-case alphanumeric strings
+```python
+IAM_APIKEY = "IAM_APIKEY"  
+URL = "URL"  
 ```
 
 ## Running locally
