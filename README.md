@@ -3,7 +3,7 @@
 <b>VoiceSens</b> is a <i>text independent</i> voice biometric solution developed to combat some of the shortcomings of standard authentication techniques like passwords and pincodes, as well as current available voice biometric solutions. The solution is developed in Python and uses Watson Speech to Text (speech recognition).
 
 <p align="center">
- <img src="https://media.giphy.com/media/8Tzgv7v3KBg9SqM2Ci/giphy.gif" align="middle">
+ <img src="https://i.imgur.com/PQPkGYo.gif" align="middle">
 </p>
 
 ## Table of Content
@@ -23,12 +23,20 @@ These instructions will get you a copy of the project up and running on your loc
 
 1. Install and set up Python 3.
 1. Sign up for an [IBM Cloud account](https://console.bluemix.net/registration/).
+   <p align="center">
+    <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-31%20Sign%20up%20for%20IBM%20Cloud.png?raw=true" width="800"  align="middle">
+   </p>
+  
 1. Create an instance of the Speech to Text service and get your credentials:
     - Go to the [Speech to Text](https://console.bluemix.net/catalog/services/speech-to-text) page in the IBM Cloud Catalog.
     - Log in to your IBM Cloud account.
     - Click **Create**.
     - Click **Show** to view the service credentials.
     - Copy the `iam_apikey` and `url` values.
+    
+    <p align="center">
+    <img src="https://i.imgur.com/Y0vZNHr.gif" align="middle">
+   </p>
 
 ## Configuring the application
 
