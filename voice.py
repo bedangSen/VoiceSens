@@ -33,19 +33,19 @@ from sklearn.mixture import GaussianMixture
 
 from watson_developer_cloud import SpeechToTextV1
 
-speech_to_text = SpeechToTextV1(
-    iam_apikey='5cItVWgNIs5fmBpEs1BuukVSwI7vmFYBldGts8bwoOKH',
-    url='https://gateway-syd.watsonplatform.net/speech-to-text/api'
-)
 
 # Note: Is there a better way to do this?
 # This is the file where the credentials are stored
 import config
 
+speech_to_text = SpeechToTextV1(
+    iam_apikey=config.iam_apikey,
+    url=config.url
+)
+
 from flask import Flask, render_template, request, jsonify, url_for, redirect, abort, session, json
 
 PORT = 8080
-HOST = '0.0.0.0'  # Set to ‘0.0.0.0’ to have server available externally
 
 # Global Variables
 random_words = []
@@ -387,4 +387,4 @@ def extract_features(rate, signal):
 
 
 if __name__ == '__main__':
-    app.run(host=HOST, port=PORT, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True)
