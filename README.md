@@ -105,13 +105,13 @@ URL = "URL"
 #### 1. VoiceSens Homepage
 
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton.png?raw=true" align="middle" width="800">
+ <img src="<a href="https://imgur.com/JuokbKe"><img src="https://i.imgur.com/JuokbKe.gif" title="source: imgur.com" /></a>" align="middle" width="800">
 </p>
 
 #### 2. Enrollment Page
 
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(1).png?raw=true" align="middle" width="650">
+ <img src="<a href="https://imgur.com/61CsyWO"><img src="https://i.imgur.com/61CsyWO.gif" title="source: imgur.com" /></a>" align="middle" width="650">
 </p>
 
 #### 3. Authentication Page
@@ -123,18 +123,8 @@ URL = "URL"
 #### 4. Voice Biometrics Page
 
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(4).png?raw=true" align="middle" width="650">
+ <img src="<a href="https://imgur.com/eVDHeSE"><img src="https://i.imgur.com/eVDHeSE.gif" title="source: imgur.com" /></a>" align="middle" width="650">
 </p>
-<p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(5).png?raw=true" align="middle" width="650">
-</p>
-<p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(6).png?raw=true" align="middle" width="650">
-</p>
-<p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(8).png?raw=true" align="middle" width="650">
-</p>
-
 
 ## Key Components
 
