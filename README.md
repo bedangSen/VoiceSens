@@ -139,7 +139,6 @@ URL = "URL"
 ## Built With
 
 * [IBM Watson Speech to Text](https://console.bluemix.net/catalog/services/speech-to-text) - The Speech to Text Service used. 
-* [Numpy](http://www.numpy.org/) - NumPy is the fundamental package for scientific computing with Python.
 * [Scipy](https://www.scipy.org/) - SciPy is a Python-based ecosystem of open-source software for mathematics, science, and engineering. 
 * [Speech Recognition](https://pypi.org/project/SpeechRecognition/) -  Library for performing speech recognition, with support for several engines and APIs, online and offline.
 * [Python Speech Features](https://python-speech-features.readthedocs.io/en/latest/) - This library provides common speech features for ASR including MFCCs and filterbank energies. 
@@ -155,9 +154,7 @@ URL = "URL"
 
 ## To Do
 
-* Make a pull request to the SpeechRecognition Library to update the ibm_recognize serivice to the updated IBM credentials service. (IBM Watson no longer provides _username_ and _password_)
 * Hashing the audio files and signing it with the clients private key, to prevent man in the middle attacks. 
-* Working on the front end. 
 * Improve the accuracy of the GMM model. 
 * Add solution architecture.
 * Storing the models in a secure Object storage
