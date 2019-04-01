@@ -136,7 +136,7 @@ URL = "URL"
 </p>
 
 
-## Built With
+## Key Components
 
 * [IBM Watson Speech to Text](https://console.bluemix.net/catalog/services/speech-to-text) - The Speech to Text Service used. 
 * [Scipy](https://www.scipy.org/) - SciPy is a Python-based ecosystem of open-source software for mathematics, science, and engineering. 
