@@ -117,7 +117,7 @@ URL = "URL"
 #### 3. Authentication Page
 
 <p align="center">
- <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-30%20VoiceSens%20Web%20Applicaiton(2).png?raw=true" align="middle" width="650">
+ <img src="<a href="https://imgur.com/U3T3uVT"><img src="https://i.imgur.com/U3T3uVT.gif" title="source: imgur.com" /></a>" align="middle" width="650">
 </p>
 
 #### 4. Voice Biometrics Page
