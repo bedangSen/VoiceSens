@@ -1,0 +1,4 @@
+applications:
+- name: VoiceSens
+  random-route: true
+  memory: 256M
