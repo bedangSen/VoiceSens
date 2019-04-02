@@ -105,25 +105,25 @@ URL = "URL"
 #### 1. VoiceSens Homepage
 
 <p align="center">
- <img src="<a href="https://imgur.com/JuokbKe"><img src="https://i.imgur.com/JuokbKe.gif" title="source: imgur.com" /></a>" align="middle" width="800">
+ <a href="https://imgur.com/JuokbKe"><img src="https://i.imgur.com/JuokbKe.gif" title="source: imgur.com" /></a>
 </p>
 
 #### 2. Enrollment Page
 
 <p align="center">
- <img src="<a href="https://imgur.com/61CsyWO"><img src="https://i.imgur.com/61CsyWO.gif" title="source: imgur.com" /></a>" align="middle" width="650">
+ <a href="https://imgur.com/61CsyWO"><img src="https://i.imgur.com/61CsyWO.gif" title="source: imgur.com" /></a>
 </p>
 
 #### 3. Authentication Page
 
 <p align="center">
- <img src="<a href="https://imgur.com/U3T3uVT"><img src="https://i.imgur.com/U3T3uVT.gif" title="source: imgur.com" /></a>" align="middle" width="650">
+ <a href="https://imgur.com/U3T3uVT"><img src="https://i.imgur.com/U3T3uVT.gif" title="source: imgur.com" /></a>
 </p>
 
 #### 4. Voice Biometrics Page
 
 <p align="center">
- <img src="<a href="https://imgur.com/eVDHeSE"><img src="https://i.imgur.com/eVDHeSE.gif" title="source: imgur.com" /></a>" align="middle" width="650">
+ <a href="https://imgur.com/eVDHeSE"><img src="https://i.imgur.com/eVDHeSE.gif" title="source: imgur.com" /></a>
 </p>
 
 ## Key Components
