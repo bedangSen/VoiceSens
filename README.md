@@ -12,7 +12,7 @@
 + [Configuring the Application](#configuring-the-application) 
 + [Running VoiceSens locally](#running-locally)
 + [Demo Screenshots](#demo)
-+ [Built with](#built-with)
++ [Key Components](#built-with)
 + [References (Further Reading)](#references)
 + [Future Additions](#to-do)
 
