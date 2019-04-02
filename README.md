@@ -22,7 +22,7 @@
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 1. Install and set up Python 3.
-1. Sign up for an [IBM Cloud account](ibm.biz/devfest2019).
+1. Sign up for an [IBM Cloud account](https://ibm.biz/devfest2019).
    <p align="center">
     <img src="https://github.com/bedangSen/VoiceSens/blob/master/Images/Screenshot_2019-03-31%20Sign%20up%20for%20IBM%20Cloud.png?raw=true" width="800"  align="middle">
    </p>
