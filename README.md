@@ -99,6 +99,8 @@ URL = "URL"
     ```
     python voice.py
     ```
+    
+1. Go to `http://localhost:8080`
 
 ## Demo
 
@@ -108,11 +110,22 @@ URL = "URL"
  <a href="https://imgur.com/JuokbKe"><img src="https://i.imgur.com/JuokbKe.gif" title="source: imgur.com" /></a>
 </p>
 
+<br><br>
+
+ The first thing that you see when you open the web page are two options:
+ 1. Enroll a new user
+ 1. Authenticate an existing user
+ 
+
 #### 2. Enrollment Page
 
 <p align="center">
  <a href="https://imgur.com/61CsyWO"><img src="https://i.imgur.com/61CsyWO.gif" title="source: imgur.com" /></a>
 </p>
+
+<br><br>
+
+If you haven't created a voice sample, the first step is to create an account and enroll your voice samples. The model then generates a voice print on the voice samples provided. 
 
 #### 3. Authentication Page
 
@@ -120,11 +133,15 @@ URL = "URL"
  <a href="https://imgur.com/U3T3uVT"><img src="https://i.imgur.com/U3T3uVT.gif" title="source: imgur.com" /></a>
 </p>
 
+Once you have created an account, you can authenticate yourself by recording a voice sample, generating a voice print, and then comparing the voice print to the voice prints in the database
+
 #### 4. Voice Biometrics Page
 
 <p align="center">
  <a href="https://imgur.com/eVDHeSE"><img src="https://i.imgur.com/eVDHeSE.gif" title="source: imgur.com" /></a>
 </p>
+
+When you record your voice sample, the first thing you do is record the environmental sound. This creates a baseline for noise in the following recording, increasing the accuracy of your results. Once you are done with that you can proceed with reciting the randomly generated words. If the fuzzy matching ratio between the generated words and recognised words is less than 65, the recorded voice phrase will not be accepted, and you will be asked to record your voice sample again. 
 
 ## Key Components
 
