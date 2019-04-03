@@ -44,7 +44,7 @@ These instructions will get you a copy of the project up and running on your loc
 1. Open the `sample_config.py` file and change the username and password for the text to speech service. Then rename the file to `config.py` 
 
 ```python
-IAM_APIKEY = "IAM_APIKEY"  
+APIKEY = "APIKEY"  
 URL = "URL"  
 ```
 
