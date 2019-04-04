@@ -39,8 +39,8 @@ from watson_developer_cloud import SpeechToTextV1
 import config
 
 speech_to_text = SpeechToTextV1(
-    iam_apikey=config.iam_apikey,
-    url=config.url
+    iam_apikey=config.APIKEY,
+    url=config.URL
 )
 
 from flask import Flask, render_template, request, jsonify, url_for, redirect, abort, session, json
