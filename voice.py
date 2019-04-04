@@ -51,7 +51,7 @@ PORT = 8080
 random_words = []
 random_string = ""
 username = ""
-user_directory = "Users/Test"
+user_directory = "Users/Test/"
 filename = ""
 filename_wav = ""
 
@@ -195,8 +195,9 @@ def voice():
         with open(filename_wav, 'rb') as audio_file:
              recognised_words = speech_to_text.recognize(audio_file, content_type='audio/wav').get_result()
 
-        recognised_words = str(recognised_words['results'][0]['alternatives'][0]['transcript'])
-        
+        print(json.dumps(recognised_words))
+
+        recognised_words = str(recognised_words['results'][0]['alternatives'][0]['transcript'])        
 
         print("IBM Speech to Text thinks you said : " + recognised_words)
         print("IBM Fuzzy partial score : " + str(fuzz.partial_ratio(random_words, recognised_words)))
@@ -331,6 +332,8 @@ def verify():
         print("[ * ] Sorry you have not been authenticated")
         auth_message = "fail"
 
+    os.remove(filename_wav)
+    print("auth_message : ", auth_message)
     return auth_message
 
 

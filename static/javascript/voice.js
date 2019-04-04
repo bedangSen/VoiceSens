@@ -205,6 +205,7 @@ function stopBackgroundRecording() {
 }
 
 document.querySelector('#close_button_accept').addEventListener('click', function () {
+  // Chceks for user verification. 
   if (number_of_attempts < 0) {
     if (document.referrer == "http://localhost:8080/auth") {
       hideElement('#acceptMessage');
@@ -212,7 +213,7 @@ document.querySelector('#close_button_accept').addEventListener('click', functio
       hideElement('#passphraseMessage');
 
       var analysis_text = 'Identifying user based on voice print';
-      document.getElementById('recordBody').innerHTML = analysis_text;
+      document.querySelector('#recordBody').innerHTML = analysis_text;
 
       document.querySelector('#vadMessage').classList.add('green');
       document.querySelector('#vadMessage').classList.remove('yellow');
@@ -228,8 +229,14 @@ document.querySelector('#close_button_accept').addEventListener('click', functio
 
           if (xhr.response == "success") {
             showElement('#authenticationComplete');
-          } else {
-            showElement('#authenticationIncomplete');
+            hideElement('#vadMessage');
+          } 
+          if (xhr.response == "fail") {
+            console.log("Does it go here : if (xhr.response == 'fail') {");
+            
+            hideElement('#vadMessage');
+            // showElement('authenticationInComplete');  //Not sure why this isn't working. The fix is down. 
+            document.querySelector('#authenticationInComplete').style.display = '';
           }
         }
       }
