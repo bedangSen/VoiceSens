@@ -28,7 +28,7 @@ pandas==0.23.4
 patsy==0.5.1
 Pillow==5.3.0
 pycparser==2.19
-Pygments==2.3.0
+Pygments==2.7.4
 pyparsing==2.3.0
 pyssp==0.1.9.6
 python-dateutil==2.7.3
