@@ -50,7 +50,7 @@ sphinxcontrib-websupport==1.1.0
 statsmodels==0.9.0
 toolz==0.9.0
 typing==3.6.6
-urllib3==1.24.1
+urllib3==1.26.5
 watson-developer-cloud==2.10.0
 websocket-client==0.48.0
 Werkzeug==0.14.1
